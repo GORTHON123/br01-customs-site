@@ -960,13 +960,31 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-silver mb-1">Photo URL (or pick a preset below)</label>
-                            <input type="url" id="new-build-image" placeholder="https://..."
-                                   class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none mb-2">
-                            <div class="flex flex-wrap gap-1.5 text-[11px]">
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Black SUV</button>
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Sport Sedan</button>
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Luxury Coupe</button>
+                            <label class="block text-xs font-medium text-silver mb-1">Upload Build Photo (JPG / PNG) *</label>
+                            <label for="new-build-file" class="cursor-pointer flex flex-col items-center justify-center gap-1.5 bg-obsidian hover:bg-steel/60 border border-dashed border-white/25 hover:border-crimson rounded-xl p-4 text-center transition-colors">
+                                <i class="fa-solid fa-cloud-arrow-up text-crimson text-xl"></i>
+                                <span id="build-file-label" class="text-xs font-medium text-white">Click to select JPG or PNG photo</span>
+                                <span class="text-[11px] text-silver/60">Auto-optimized for fast loading</span>
+                            </label>
+                            <input type="file" id="new-build-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="hidden">
+
+                            <!-- Live Image Preview -->
+                            <div id="new-build-preview-wrap" class="hidden mt-3 relative rounded-xl overflow-hidden border border-white/15 bg-obsidian">
+                                <img id="new-build-preview-img" src="" alt="Build Preview" class="w-full h-36 object-cover">
+                                <button type="button" id="clear-build-file-btn" class="absolute top-2 right-2 bg-black/80 hover:bg-crimson text-white text-xs px-2.5 py-1 rounded-lg transition-colors">
+                                    Remove
+                                </button>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-[11px] text-silver/60 mb-1">Or paste an image URL / use a preset:</label>
+                                <input type="url" id="new-build-image" placeholder="https://... (optional if JPG/PNG uploaded)"
+                                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none mb-2">
+                                <div class="flex flex-wrap gap-1.5 text-[11px]">
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Black SUV</button>
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Sport Sedan</button>
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Luxury Coupe</button>
+                                </div>
                             </div>
                         </div>
 
