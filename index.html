@@ -852,7 +852,7 @@
                     </div>
                     <div class="bg-gunmetal border border-white/10 rounded-xl p-5">
                         <div class="text-xs uppercase tracking-wider text-silver/70">Live Portfolio Builds</div>
-                        <div id="stat-portfolio-count" class="font-display font-bold text-3xl text-white mt-1">6</div>
+                        <div id="stat-portfolio-count" class="font-display font-bold text-3xl text-white mt-1">0</div>
                         <div class="text-xs text-silver/60 mt-1">Published in Recent Builds</div>
                     </div>
                 </div>
@@ -960,13 +960,31 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-silver mb-1">Photo URL (or pick a preset below)</label>
-                            <input type="url" id="new-build-image" placeholder="https://..."
-                                   class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none mb-2">
-                            <div class="flex flex-wrap gap-1.5 text-[11px]">
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Black SUV</button>
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Sport Sedan</button>
-                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Luxury Coupe</button>
+                            <label class="block text-xs font-medium text-silver mb-1">Upload Build Photo (JPG / PNG) *</label>
+                            <label for="new-build-file" class="cursor-pointer flex flex-col items-center justify-center gap-1.5 bg-obsidian hover:bg-steel/60 border border-dashed border-white/25 hover:border-crimson rounded-xl p-4 text-center transition-colors">
+                                <i class="fa-solid fa-cloud-arrow-up text-crimson text-xl"></i>
+                                <span id="build-file-label" class="text-xs font-medium text-white">Click to select JPG or PNG photo</span>
+                                <span class="text-[11px] text-silver/60">Auto-optimized for fast loading</span>
+                            </label>
+                            <input type="file" id="new-build-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="hidden">
+
+                            <!-- Live Image Preview -->
+                            <div id="new-build-preview-wrap" class="hidden mt-3 relative rounded-xl overflow-hidden border border-white/15 bg-obsidian">
+                                <img id="new-build-preview-img" src="" alt="Build Preview" class="w-full h-36 object-cover">
+                                <button type="button" id="clear-build-file-btn" class="absolute top-2 right-2 bg-black/80 hover:bg-crimson text-white text-xs px-2.5 py-1 rounded-lg transition-colors">
+                                    Remove
+                                </button>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="block text-[11px] text-silver/60 mb-1">Or paste an image URL / use a preset:</label>
+                                <input type="url" id="new-build-image" placeholder="https://... (optional if JPG/PNG uploaded)"
+                                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2 text-white text-xs focus:outline-none mb-2">
+                                <div class="flex flex-wrap gap-1.5 text-[11px]">
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Black SUV</button>
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Sport Sedan</button>
+                                    <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Luxury Coupe</button>
+                                </div>
                             </div>
                         </div>
 
@@ -1034,62 +1052,11 @@
         const WEB3FORMS_ACCESS_KEY = "73f17188-1be0-4d50-afc9-bdd7310a0de3";
         const DEFAULT_ADMIN_PIN = "0101";
 
-        // Default Seed Builds (6 Authentic Indian Car Builds for Patna)
-        const SEED_BUILDS = [
-            {
-                id: "seed-1",
-                title: "Mahindra Thar 4x4 — Stage 1 + 2-Inch Lift",
-                category: "Performance & Exhaust",
-                mods: "Stage 1 Diesel ECU Remap, BMC Air Filter, Dr.Nano 2-Inch Lift Kit & All-Terrain Setup",
-                image: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000006
-            },
-            {
-                id: "seed-2",
-                title: "Hyundai Verna Turbo — Valvetronic Exhaust + Matte Wrap",
-                category: "Wraps & PPF",
-                mods: "Mark Performance Valvetronic Exhaust, Avery Satin Stealth Black Wrap & De-Chrome",
-                image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000005
-            },
-            {
-                id: "seed-3",
-                title: "Skoda Slavia 1.5 TSI — ECU Tune + Dr.Nano Coilovers",
-                category: "Performance & Exhaust",
-                mods: "Stage 1+ ECU & DSG Calibration, Dr.Nano Adjustable Coil-overs & Stainless Downpipe",
-                image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000004
-            },
-            {
-                id: "seed-4",
-                title: "Toyota Fortuner Legender — Full Gloss TPU PPF",
-                category: "Wraps & PPF",
-                mods: "200-Micron Self-Healing Gloss TPU PPF, 9H Ceramic Topcoat & Underbody Anti-Rust",
-                image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000003
-            },
-            {
-                id: "seed-5",
-                title: "Honda City ZX — Xenon_it Bi-LED Projector Retrofit",
-                category: "Lighting & Suspension",
-                mods: "Xenon_it Tri-Color Bi-LED Projectors, Sequential DRLs & 64-Color Ambient Cabin Lighting",
-                image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000002
-            },
-            {
-                id: "seed-6",
-                title: "Tata Nexon Fearless — 9H Graphene Ceramic Coating",
-                category: "Wraps & PPF",
-                mods: "3-Stage Paint Correction, 10H Graphene Ceramic Shield & Interior Leather Protection",
-                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000001
-            }
-        ];
-
-        // Application Reactive State
+        // Application Reactive State (Starts clean — no auto-reappearing demo builds)
         let state = {
-            builds: [...SEED_BUILDS],
+            builds: [],
             bookings: [],
+            uploadedBuildDataUrl: "",
             settings: {
                 bannerText: "🔥 MONSOON & FESTIVE OFFER: 15% OFF Full Body PPF & Ceramic Coating — Book Your Slot Today",
                 bannerVisible: true,
@@ -1105,6 +1072,29 @@
             user: null,
             appId: typeof __app_id !== 'undefined' ? __app_id : 'br01-customs-patna'
         };
+
+        // Resize & compress uploaded JPG/PNG so it saves cleanly in Firestore & loads fast
+        function compressImageFile(file, maxWidth = 1000, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const scale = Math.min(1, maxWidth / img.width);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = Math.round(img.width * scale);
+                        canvas.height = Math.round(img.height * scale);
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
 
         function getActiveWhatsApp() {
             const raw = (state.settings?.whatsappNumber || DEFAULT_WORKSHOP_PHONE).replace(/[^0-9]/g, '');
@@ -1201,27 +1191,20 @@
             renderBuildsGallery();
         }
 
-        // Attach Firestore Real-Time Listeners (Strictly following RULE 1 & RULE 2)
+        // Attach Firestore Real-Time Listeners
         function attachRealtimeListeners() {
             if (!state.db || !state.user) return;
             const appId = state.appId;
 
-            // 1. Public Builds Collection
+            // 1. Public Builds Collection (stays empty when all builds are deleted)
             const buildsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'builds');
             onSnapshot(buildsCol, (snapshot) => {
-                if (snapshot.empty) {
-                    // Seed initial builds to Firestore once
-                    SEED_BUILDS.forEach(async (b) => {
-                        await setDoc(doc(state.db, 'artifacts', appId, 'public', 'data', 'builds', b.id), b);
-                    });
-                } else {
-                    const items = [];
-                    snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-                    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    state.builds = items;
-                    renderBuildsGallery();
-                    renderAdminDashboard();
-                }
+                const items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                state.builds = items;
+                renderBuildsGallery();
+                renderAdminDashboard();
             }, (error) => console.error("Builds snapshot error:", error));
 
             // 2. Public Bookings Collection
@@ -1254,7 +1237,7 @@
                 : state.builds.filter(b => b.category === state.activeBuildFilter);
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-silver/60">No builds found in this category yet.</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-silver/60">No builds published yet.</div>`;
                 return;
             }
 
@@ -1416,21 +1399,25 @@
             // Render Admin Builds List
             const buildsList = document.getElementById('admin-builds-list');
             if (buildsList) {
-                buildsList.innerHTML = state.builds.map(build => `
-                    <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 p-3 rounded-xl">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <img src="${build.image}" onerror="this.src='https://placehold.co/100x100/14181F/FF3B1D?text=BR01'" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
-                            <div class="min-w-0">
-                                <div class="font-semibold text-white text-sm truncate">${build.title}</div>
-                                <div class="text-[11px] text-crimson font-medium">${build.category}</div>
-                                <div class="text-xs text-silver/70 truncate">${build.mods}</div>
+                if (state.builds.length === 0) {
+                    buildsList.innerHTML = `<div class="text-center py-8 text-xs text-silver/60">No builds published yet. Use the form on the left to upload a JPG/PNG photo and publish a build!</div>`;
+                } else {
+                    buildsList.innerHTML = state.builds.map(build => `
+                        <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 p-3 rounded-xl">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img src="${build.image}" onerror="this.src='https://placehold.co/100x100/14181F/FF3B1D?text=BR01'" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
+                                <div class="min-w-0">
+                                    <div class="font-semibold text-white text-sm truncate">${build.title}</div>
+                                    <div class="text-[11px] text-crimson font-medium">${build.category}</div>
+                                    <div class="text-xs text-silver/70 truncate">${build.mods}</div>
+                                </div>
                             </div>
+                            <button onclick="deleteBuild('${build.id}')" class="text-silver/60 hover:text-crimson p-2 shrink-0" title="Remove Build">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
-                        <button onclick="deleteBuild('${build.id}')" class="text-silver/60 hover:text-crimson p-2 shrink-0" title="Remove Build">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `).join('');
+                    `).join('');
+                }
             }
         }
 
@@ -1502,6 +1489,13 @@
         };
 
         window.setPresetCarImg = function(url) {
+            state.uploadedBuildDataUrl = "";
+            const fileInput = document.getElementById('new-build-file');
+            const previewWrap = document.getElementById('new-build-preview-wrap');
+            const fileLabel = document.getElementById('build-file-label');
+            if (fileInput) fileInput.value = "";
+            if (previewWrap) previewWrap.classList.add('hidden');
+            if (fileLabel) fileLabel.textContent = "Click to select JPG or PNG photo";
             document.getElementById('new-build-image').value = url;
         };
 
@@ -1783,13 +1777,54 @@
                 }
             });
 
+            // JPG / PNG File Picker for Build Photos
+            const buildFileInput = document.getElementById('new-build-file');
+            const buildFileLabel = document.getElementById('build-file-label');
+            const previewWrap = document.getElementById('new-build-preview-wrap');
+            const previewImg = document.getElementById('new-build-preview-img');
+            const clearFileBtn = document.getElementById('clear-build-file-btn');
+
+            if (buildFileInput) {
+                buildFileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                        showToast("Please select a valid JPG or PNG image.");
+                        buildFileInput.value = "";
+                        return;
+                    }
+                    try {
+                        buildFileLabel.textContent = "Optimizing image...";
+                        const compressedDataUrl = await compressImageFile(file, 1000, 0.8);
+                        state.uploadedBuildDataUrl = compressedDataUrl;
+                        buildFileLabel.textContent = file.name;
+                        previewImg.src = compressedDataUrl;
+                        previewWrap.classList.remove('hidden');
+                        document.getElementById('new-build-image').value = "";
+                    } catch (err) {
+                        console.error("Image processing error:", err);
+                        showToast("Could not read image file. Try another JPG/PNG.");
+                    }
+                });
+            }
+
+            if (clearFileBtn) {
+                clearFileBtn.addEventListener('click', () => {
+                    state.uploadedBuildDataUrl = "";
+                    if (buildFileInput) buildFileInput.value = "";
+                    if (previewWrap) previewWrap.classList.add('hidden');
+                    if (buildFileLabel) buildFileLabel.textContent = "Click to select JPG or PNG photo";
+                });
+            }
+
             // Add New Build Form (Admin Panel)
             document.getElementById('add-build-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const title = document.getElementById('new-build-title').value.trim();
                 const category = document.getElementById('new-build-category').value;
                 const mods = document.getElementById('new-build-mods').value.trim();
-                const image = document.getElementById('new-build-image').value.trim() || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=1000&q=80";
+                const urlInput = document.getElementById('new-build-image').value.trim();
+                const image = state.uploadedBuildDataUrl || urlInput || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=1000&q=80";
 
                 const newBuild = {
                     title,
@@ -1809,6 +1844,9 @@
                 }
 
                 e.target.reset();
+                state.uploadedBuildDataUrl = "";
+                if (previewWrap) previewWrap.classList.add('hidden');
+                if (buildFileLabel) buildFileLabel.textContent = "Click to select JPG or PNG photo";
                 showToast("New build published to live gallery!");
             });
         });
