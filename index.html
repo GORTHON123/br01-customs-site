@@ -1052,11 +1052,62 @@
         const WEB3FORMS_ACCESS_KEY = "73f17188-1be0-4d50-afc9-bdd7310a0de3";
         const DEFAULT_ADMIN_PIN = "0101";
 
-         // Application Reactive State (Starts clean — no auto-reappearing demo builds)
+        // Default Seed Builds (6 Authentic Indian Car Builds for Patna)
+        const SEED_BUILDS = [
+            {
+                id: "seed-1",
+                title: "Mahindra Thar 4x4 — Stage 1 + 2-Inch Lift",
+                category: "Performance & Exhaust",
+                mods: "Stage 1 Diesel ECU Remap, BMC Air Filter, Dr.Nano 2-Inch Lift Kit & All-Terrain Setup",
+                image: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000006
+            },
+            {
+                id: "seed-2",
+                title: "Hyundai Verna Turbo — Valvetronic Exhaust + Matte Wrap",
+                category: "Wraps & PPF",
+                mods: "Mark Performance Valvetronic Exhaust, Avery Satin Stealth Black Wrap & De-Chrome",
+                image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000005
+            },
+            {
+                id: "seed-3",
+                title: "Skoda Slavia 1.5 TSI — ECU Tune + Dr.Nano Coilovers",
+                category: "Performance & Exhaust",
+                mods: "Stage 1+ ECU & DSG Calibration, Dr.Nano Adjustable Coil-overs & Stainless Downpipe",
+                image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000004
+            },
+            {
+                id: "seed-4",
+                title: "Toyota Fortuner Legender — Full Gloss TPU PPF",
+                category: "Wraps & PPF",
+                mods: "200-Micron Self-Healing Gloss TPU PPF, 9H Ceramic Topcoat & Underbody Anti-Rust",
+                image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000003
+            },
+            {
+                id: "seed-5",
+                title: "Honda City ZX — Xenon_it Bi-LED Projector Retrofit",
+                category: "Lighting & Suspension",
+                mods: "Xenon_it Tri-Color Bi-LED Projectors, Sequential DRLs & 64-Color Ambient Cabin Lighting",
+                image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000002
+            },
+            {
+                id: "seed-6",
+                title: "Tata Nexon Fearless — 9H Graphene Ceramic Coating",
+                category: "Wraps & PPF",
+                mods: "3-Stage Paint Correction, 10H Graphene Ceramic Shield & Interior Leather Protection",
+                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000001
+            }
+        ];
+
+        // Application Reactive State
         let state = {
-            builds: [],
+            builds: [...SEED_BUILDS],
             bookings: [],
-            uploadedBuildDataUrl: "",
             settings: {
                 bannerText: "🔥 MONSOON & FESTIVE OFFER: 15% OFF Full Body PPF & Ceramic Coating — Book Your Slot Today",
                 bannerVisible: true,
@@ -1073,55 +1124,54 @@
             appId: typeof __app_id !== 'undefined' ? __app_id : 'br01-customs-patna'
         };
 
+        function getActiveWhatsApp() {
+            const raw = (state.settings?.whatsappNumber || DEFAULT_WORKSHOP_PHONE).replace(/[^0-9]/g, '');
+            if (!raw) return DEFAULT_WORKSHOP_PHONE;
+            return raw.length === 10 ? `91${raw}` : raw;
+        }
 
-        // Resize & compress uploaded JPG/PNG so it saves cleanly in Firestore & loads fast
-        function compressImageFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const maxWidth = 1000;
-                        const scale = img.width > maxWidth ? maxWidth / img.width : 1;
-                        canvas.width = Math.round(img.width * scale);
-                        canvas.height = Math.round(img.height * scale);
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.8));
-                    };
-                    img.onerror = reject;
-                    img.src = e.target.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
+        function getActiveAdminPin() {
+            return (state.settings?.adminPin || DEFAULT_ADMIN_PIN).trim();
         }
 
         // Toast Helper
         function showToast(msg) {
             const toast = document.getElementById('toast-banner');
-            const toastMsg = document.getElementById('toast-message');
-            if (!toast || !toastMsg) return;
-            toastMsg.textContent = msg;
+            if (!toast) return;
+            document.getElementById('toast-message').textContent = msg;
             toast.classList.remove('hidden');
             toast.classList.add('flex');
             setTimeout(() => {
                 toast.classList.add('hidden');
                 toast.classList.remove('flex');
-            }, 3200);
+            }, 3000);
         }
 
-        // Initialize Firebase Cloud Backend
-        async function initFirebaseBackend() {
+        function activateFallbackMode() {
+            state.useCloud = false;
+            const badge = document.getElementById('db-connection-badge');
+            const adminBadge = document.getElementById('admin-storage-mode');
+            if (badge) badge.textContent = "• Instant Sync";
+            if (adminBadge) adminBadge.textContent = "Instant Session DB";
+            renderAll();
+        }
+
+        // Initialize Firebase Firestore (with seamless in-memory fallback if offline/unconfigured)
+        async function initBackend() {
             try {
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
-                    throw new Error("No embedded Firebase config found");
-                }
-                const firebaseConfig = JSON.parse(__firebase_config);
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDJuZC28-O9aCj8y5QFfPqu0jCeD_wlIs8",
+                    authDomain: "br01-customs.firebaseapp.com",
+                    projectId: "br01-customs",
+                    storageBucket: "br01-customs.firebasestorage.app",
+                    messagingSenderId: "272858778014",
+                    appId: "1:272858778014:web:b96fe32da458610941ee8f"
+                };
+
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
-                state.db = getFirestore(app);
+                const db = getFirestore(app);
+                state.db = db;
 
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -1130,68 +1180,66 @@
                 }
 
                 onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        state.user = user;
-                        state.useCloud = true;
-                        const dbBadge = document.getElementById('db-connection-badge');
-                        const adminStorage = document.getElementById('admin-storage-mode');
-                        if (dbBadge) dbBadge.innerHTML = "&bull; Live Sync";
-                        if (adminStorage) adminStorage.textContent = "Cloud DB Connected";
-                        attachRealtimeListeners();
-                    }
+                    if (!user) return;
+                    state.user = user;
+                    state.useCloud = true;
+                    attachRealtimeListeners();
                 });
             } catch (err) {
-                console.warn("Running in LocalStorage fallback mode:", err.message);
-                state.useCloud = false;
-                const dbBadge = document.getElementById('db-connection-badge');
-                const adminStorage = document.getElementById('admin-storage-mode');
-                if (dbBadge) dbBadge.innerHTML = "&bull; Local Sync";
-                if (adminStorage) adminStorage.textContent = "Local Mode Active";
-                loadLocalState();
+                console.warn("Running in instant local-sync mode:", err);
+                activateFallbackMode();
             }
         }
 
-        // LocalStorage Fallback
-        function loadLocalState() {
-            try {
-                const savedBuilds = localStorage.getItem('br01_builds');
-                const savedBookings = localStorage.getItem('br01_bookings');
-                const savedSettings = localStorage.getItem('br01_settings');
-                if (savedBuilds !== null) state.builds = JSON.parse(savedBuilds);
-                if (savedBookings !== null) state.bookings = JSON.parse(savedBookings);
-                if (savedSettings !== null) state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
-            } catch (e) {
-                console.error("Local state load error:", e);
+        // Apply Promo Banner & Routing Settings
+        function applySiteSettings() {
+            const banner = document.getElementById('promo-banner');
+            const bannerText = document.getElementById('promo-banner-text');
+            const adminInput = document.getElementById('admin-banner-input');
+            const adminToggle = document.getElementById('admin-banner-toggle');
+            const waInput = document.getElementById('cfg-whatsapp');
+            const emailInput = document.getElementById('cfg-email');
+            const pinInput = document.getElementById('cfg-admin-pin');
+
+            if (bannerText) bannerText.textContent = state.settings.bannerText;
+            if (adminInput) adminInput.value = state.settings.bannerText;
+            if (adminToggle) adminToggle.checked = state.settings.bannerVisible;
+            if (waInput && document.activeElement !== waInput) waInput.value = getActiveWhatsApp();
+            if (emailInput && document.activeElement !== emailInput) emailInput.value = state.settings.receiverEmail || "";
+            if (pinInput && document.activeElement !== pinInput) pinInput.value = getActiveAdminPin();
+
+            if (banner) {
+                if (state.settings.bannerVisible) {
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
             }
-            applySiteSettings();
+            recalculateEstimator();
             renderBuildsGallery();
-            renderAdminDashboard();
         }
 
-        function saveLocalState() {
-            try {
-                localStorage.setItem('br01_builds', JSON.stringify(state.builds));
-                localStorage.setItem('br01_bookings', JSON.stringify(state.bookings));
-                localStorage.setItem('br01_settings', JSON.stringify(state.settings));
-            } catch (e) {
-                console.error("Local state save error:", e);
-            }
-        }
-
-        // Attach Firestore Real-Time Listeners
+        // Attach Firestore Real-Time Listeners (Strictly following RULE 1 & RULE 2)
         function attachRealtimeListeners() {
             if (!state.db || !state.user) return;
             const appId = state.appId;
 
-            // 1. Public Builds Collection (stays permanently empty when all builds are deleted)
+            // 1. Public Builds Collection
             const buildsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'builds');
             onSnapshot(buildsCol, (snapshot) => {
-                const items = [];
-                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-                items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                state.builds = items;
-                renderBuildsGallery();
-                renderAdminDashboard();
+                if (snapshot.empty) {
+                    // Seed initial builds to Firestore once
+                    SEED_BUILDS.forEach(async (b) => {
+                        await setDoc(doc(state.db, 'artifacts', appId, 'public', 'data', 'builds', b.id), b);
+                    });
+                } else {
+                    const items = [];
+                    snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    state.builds = items;
+                    renderBuildsGallery();
+                    renderAdminDashboard();
+                }
             }, (error) => console.error("Builds snapshot error:", error));
 
             // 2. Public Bookings Collection
@@ -1204,157 +1252,176 @@
                 renderAdminDashboard();
             }, (error) => console.error("Bookings snapshot error:", error));
 
-            // 3. Site Settings Document
-            const settingsDoc = doc(state.db, 'artifacts', appId, 'public', 'data', 'settings', 'general');
+            // 3. Public Site Settings Document
+            const settingsDoc = doc(state.db, 'artifacts', appId, 'public', 'data', 'settings', 'global');
             onSnapshot(settingsDoc, (docSnap) => {
                 if (docSnap.exists()) {
                     state.settings = { ...state.settings, ...docSnap.data() };
                     applySiteSettings();
-                    renderAdminDashboard();
                 }
             }, (error) => console.error("Settings snapshot error:", error));
         }
 
-        // Apply Site Settings (Banner, WhatsApp Routing, Admin Inputs)
-        function applySiteSettings() {
-            const banner = document.getElementById('promo-banner');
-            const bannerText = document.getElementById('promo-banner-text');
-            if (banner && bannerText) {
-                bannerText.textContent = state.settings.bannerText || "";
-                if (state.settings.bannerVisible) {
-                    banner.classList.remove('hidden');
-                } else {
-                    banner.classList.add('hidden');
-                }
-            }
-
-            const adminBannerInput = document.getElementById('admin-banner-input');
-            const adminBannerToggle = document.getElementById('admin-banner-toggle');
-            const cfgWhatsapp = document.getElementById('cfg-whatsapp');
-            const cfgEmail = document.getElementById('cfg-email');
-            if (adminBannerInput) adminBannerInput.value = state.settings.bannerText || "";
-            if (adminBannerToggle) adminBannerToggle.checked = state.settings.bannerVisible !== false;
-            if (cfgWhatsapp) cfgWhatsapp.value = state.settings.whatsappNumber || DEFAULT_WORKSHOP_PHONE;
-            if (cfgEmail) cfgEmail.value = state.settings.receiverEmail || "";
-            updateEstimatorSummary();
-        }
-
-        // Render Public Builds Gallery
+        // Render Public Recent Builds Gallery
         function renderBuildsGallery() {
             const grid = document.getElementById('public-builds-grid');
             if (!grid) return;
 
-            const filtered = state.activeBuildFilter === 'All'
+            const filtered = state.activeBuildFilter === "All"
                 ? state.builds
                 : state.builds.filter(b => b.category === state.activeBuildFilter);
 
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full bg-gunmetal border border-white/10 rounded-2xl p-10 text-center">
-                        <i class="fa-solid fa-car-burst text-crimson text-3xl mb-3"></i>
-                        <h3 class="font-display font-bold text-xl text-white uppercase">No Builds Published Yet</h3>
-                        <p class="text-xs text-silver/70 mt-1">New Patna workshop builds will appear here as soon as they are published.</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-silver/60">No builds found in this category yet.</div>`;
                 return;
             }
 
-            grid.innerHTML = filtered.map(build => `
-                <article class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl overflow-hidden group transition-all flex flex-col justify-between">
-                    <div>
-                        <div class="relative h-56 overflow-hidden bg-obsidian">
-                            <img src="${build.imageUrl || 'https://placehold.co/800x500/14181F/FF3B1D?text=BR01+CUSTOMS'}"
-                                 onerror="this.src='https://placehold.co/800x500/14181F/FF3B1D?text=BR01+CUSTOMS'"
-                                 alt="${build.title || 'BR01 Custom Build'}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <span class="absolute top-3 left-3 bg-obsidian/90 border border-white/15 text-crimson text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
-                                ${build.category || 'Custom Build'}
-                            </span>
+            grid.innerHTML = filtered.map(build => {
+                const waText = encodeURIComponent(`Hi BR01 Customs Patna! I saw the "${build.title}" build on your website and want a quote for similar mods.`);
+                return `
+                    <div class="bg-obsidian border border-white/10 hover:border-crimson/50 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="relative h-56 overflow-hidden">
+                                <img src="${build.image}" 
+                                     onerror="this.src='https://placehold.co/800x600/14181F/FF3B1D?text=BR01+CUSTOMS+BUILD'"
+                                     alt="${build.title}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-crimson text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-crimson/30">
+                                    ${build.category}
+                                </span>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="font-display font-bold text-xl text-white uppercase tracking-wide group-hover:text-crimson transition-colors">
+                                    ${build.title}
+                                </h3>
+                                <p class="text-silver/80 text-xs sm:text-sm mt-2 leading-relaxed">
+                                    <strong class="text-white">Mods:</strong> ${build.mods}
+                                </p>
+                            </div>
                         </div>
-                        <div class="p-5">
-                            <h3 class="font-display font-bold text-xl text-white uppercase tracking-wide">${build.title || 'Untitled Build'}</h3>
-                            <p class="text-xs text-silver/80 mt-2 leading-relaxed">
-                                <strong class="text-white">Spec Sheet:</strong> ${build.mods || 'Custom Workshop Upgrade'}
-                            </p>
+                        <div class="px-5 pb-5 pt-2">
+                            <a href="https://wa.me/${getActiveWhatsApp()}?text=${waText}" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-gunmetal hover:bg-crimson text-white text-xs font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 border border-white/10 transition-colors">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Enquire Similar Build</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="px-5 pb-5 pt-2 flex items-center justify-between border-t border-white/5">
-                        <span class="text-[11px] text-silver/60">Built at Patna HQ</span>
-                        <a href="#cost-estimator" class="text-xs font-semibold text-crimson hover:text-white transition-colors">
-                            Quote Similar Build &rarr;
-                        </a>
-                    </div>
-                </article>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        // Render Admin Dashboard (Stats, Bookings Table, Builds List)
-        function renderAdminDashboard() {
-            const totalBookingsEl = document.getElementById('stat-total-bookings');
-            const pipelineEl = document.getElementById('stat-pipeline-value');
-            const activeJobsEl = document.getElementById('stat-active-jobs');
-            const portfolioCountEl = document.getElementById('stat-portfolio-count');
+        // Update Cost Estimator Calculations
+        function recalculateEstimator() {
+            const checkedBoxes = document.querySelectorAll('.est-checkbox:checked');
+            let baseSum = 0;
+            let totalDays = 0;
+            const selectedNames = [];
 
+            checkedBoxes.forEach(cb => {
+                baseSum += parseInt(cb.dataset.base, 10);
+                totalDays += parseInt(cb.dataset.days, 10);
+                selectedNames.push(cb.value);
+            });
+
+            // Highlight selected cards
+            document.querySelectorAll('.est-service-card').forEach(card => {
+                const cb = card.querySelector('.est-checkbox');
+                if (cb.checked) {
+                    card.classList.add('border-crimson', 'bg-crimson/10');
+                    card.classList.remove('border-white/10', 'bg-obsidian');
+                } else {
+                    card.classList.remove('border-crimson', 'bg-crimson/10');
+                    card.classList.add('border-white/10', 'bg-obsidian');
+                }
+            });
+
+            const minPrice = Math.round((baseSum * state.segmentMultiplier) / 500) * 500;
+            const maxPrice = Math.round((minPrice * 1.18) / 500) * 500;
+            const turnaround = totalDays === 0 ? "Same Day Checkup" : totalDays === 1 ? "1 Working Day" : `${Math.min(totalDays, 6)} Working Days`;
+
+            const priceEl = document.getElementById('est-price-display');
+            const timeEl = document.getElementById('est-turnaround-display');
+
+            if (selectedNames.length === 0) {
+                priceEl.textContent = "Select at least 1 service";
+            } else {
+                priceEl.textContent = `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`;
+            }
+            timeEl.textContent = turnaround;
+
+            // Update Direct WhatsApp Link
+            const carInput = document.getElementById('cust-car')?.value.trim() || state.selectedSegment;
+            const waMsg = `Hi BR01 Customs Patna! 🏁\nI generated an estimate on your website:\n\n• Car: ${carInput} (${state.selectedSegment})\n• Services: ${selectedNames.join(', ') || 'General Consultation'}\n• Est. Range: ₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}\n\nPlease share available slot timings at Sri Krishna Puri.`;
+            const directWaBtn = document.getElementById('direct-wa-quote-btn');
+            if (directWaBtn) {
+                directWaBtn.href = `https://wa.me/${getActiveWhatsApp()}?text=${encodeURIComponent(waMsg)}`;
+            }
+
+            return { minPrice, maxPrice, selectedNames, turnaround };
+        }
+
+        // Preselect service from Services Grid button
+        window.preselectService = function(serviceName) {
+            document.querySelectorAll('.est-checkbox').forEach(cb => {
+                if (cb.value === serviceName) cb.checked = true;
+            });
+            recalculateEstimator();
+        };
+
+        // Render Admin Dashboard Tables & Stats
+        function renderAdminDashboard() {
+            // Update Analytics Cards
             const totalBookings = state.bookings.length;
-            const pipelineSum = state.bookings.reduce((sum, b) => sum + (Number(b.numericEstimate) || 0), 0);
+            const pipelineSum = state.bookings.reduce((acc, b) => acc + (Number(b.estimatedMin) || 0), 0);
             const activeJobs = state.bookings.filter(b => b.status !== 'Completed').length;
 
-            if (totalBookingsEl) totalBookingsEl.textContent = totalBookings;
-            if (pipelineEl) pipelineEl.textContent = `₹${pipelineSum.toLocaleString('en-IN')}`;
-            if (activeJobsEl) activeJobsEl.textContent = activeJobs;
-            if (portfolioCountEl) portfolioCountEl.textContent = state.builds.length;
+            document.getElementById('stat-total-bookings').textContent = totalBookings;
+            document.getElementById('stat-pipeline-value').textContent = `₹${pipelineSum.toLocaleString('en-IN')}`;
+            document.getElementById('stat-active-jobs').textContent = activeJobs;
+            document.getElementById('stat-portfolio-count').textContent = state.builds.length;
 
-            // Bookings Table
+            // Render Bookings Table
             const tbody = document.getElementById('admin-bookings-tbody');
             if (tbody) {
                 if (state.bookings.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="py-8 text-center text-xs text-silver/60">
-                                No customer bookings in queue yet. New quote submissions appear here automatically.
-                            </td>
-                        </tr>
-                    `;
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-silver/60">No customer bookings yet. Submit one from the estimator to test!</td></tr>`;
                 } else {
                     tbody.innerHTML = state.bookings.map(b => {
-                        const cleanPhone = String(b.phone || '').replace(/\D/g, '');
-                        const waLink = cleanPhone
-                            ? `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(`Hi ${b.name}, this is BR01 Customs Patna regarding your ${b.carModel} booking on ${b.preferredDate}.`)}`
-                            : '#';
+                        const cleanPhone = (b.phone || '').replace(/[^0-9]/g, '');
+                        const waCustomerMsg = encodeURIComponent(`Hi ${b.name}, this is BR01 Customs Patna! Your slot for ${b.carModel} (${(b.services || []).join(', ')}) on ${b.preferredDate} is currently marked: *${b.status}*. See you at Sri Krishna Puri!`);
                         return `
-                            <tr class="hover:bg-white/5 transition-colors">
+                            <tr class="hover:bg-obsidian/50">
                                 <td class="py-3.5 px-3">
-                                    <div class="font-semibold text-white">${b.name || 'Customer'}</div>
-                                    <div class="text-xs text-silver/70">${b.phone || ''}</div>
-                                    ${b.email ? `<div class="text-[11px] text-silver/50">${b.email}</div>` : ''}
+                                    <div class="font-semibold text-white">${b.name}</div>
+                                    <div class="text-xs text-silver/70">${b.phone}</div>
                                 </td>
                                 <td class="py-3.5 px-3">
-                                    <div class="font-medium text-white">${b.carModel || '-'}</div>
-                                    <div class="text-xs text-silver/60">${b.segment || ''}</div>
+                                    <div class="font-medium text-white">${b.carModel}</div>
+                                    <div class="text-[11px] text-silver/60">${b.segment}</div>
                                 </td>
-                                <td class="py-3.5 px-3 max-w-xs">
-                                    <div class="text-xs text-silver/90">${Array.isArray(b.services) ? b.services.join(', ') : (b.services || '-')}</div>
-                                </td>
-                                <td class="py-3.5 px-3">
-                                    <div class="font-semibold text-crimson">${b.estimateRange || '-'}</div>
-                                    <div class="text-xs text-silver/70">${b.preferredDate || '-'}</div>
+                                <td class="py-3.5 px-3 text-xs text-silver">
+                                    ${(b.services || []).join(', ')}
                                 </td>
                                 <td class="py-3.5 px-3">
-                                    <select onchange="updateBookingStatus('${b.id}', this.value)"
-                                            class="bg-obsidian border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-crimson">
+                                    <div class="font-semibold text-crimson text-xs">₹${(b.estimatedMin || 0).toLocaleString('en-IN')} – ₹${(b.estimatedMax || 0).toLocaleString('en-IN')}</div>
+                                    <div class="text-[11px] text-silver/70 mt-0.5"><i class="fa-regular fa-calendar"></i> ${b.preferredDate}</div>
+                                </td>
+                                <td class="py-3.5 px-3">
+                                    <select onchange="updateBookingStatus('${b.id}', this.value)" class="bg-obsidian border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:border-crimson focus:outline-none">
                                         <option value="Pending" ${b.status === 'Pending' ? 'selected' : ''}>Pending</option>
                                         <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                                        <option value="In-Bay" ${b.status === 'In-Bay' ? 'selected' : ''}>In-Bay</option>
+                                        <option value="In Bay" ${b.status === 'In Bay' ? 'selected' : ''}>In Bay</option>
                                         <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Completed</option>
                                     </select>
                                 </td>
                                 <td class="py-3.5 px-3 text-right space-x-2 whitespace-nowrap">
-                                    <a href="${waLink}" target="_blank" rel="noopener noreferrer" title="WhatsApp Customer"
-                                       class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-colors">
-                                        <i class="fa-brands fa-whatsapp"></i>
+                                    <a href="https://wa.me/${cleanPhone.length >= 10 ? cleanPhone : getActiveWhatsApp()}?text=${waCustomerMsg}" target="_blank" rel="noopener noreferrer"
+                                       class="inline-flex items-center gap-1 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
                                     </a>
-                                    <button onclick="deleteBooking('${b.id}')" title="Delete Booking"
-                                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-crimson/20 hover:bg-crimson text-crimson hover:text-white transition-colors">
+                                    <button onclick="deleteBooking('${b.id}')" class="text-silver/60 hover:text-crimson p-1.5" title="Delete Booking">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </td>
@@ -1364,551 +1431,406 @@
                 }
             }
 
-            // Admin Builds List
+            // Render Admin Builds List
             const buildsList = document.getElementById('admin-builds-list');
             if (buildsList) {
-                if (state.builds.length === 0) {
-                    buildsList.innerHTML = `
-                        <div class="p-6 text-center text-xs text-silver/60 bg-obsidian rounded-xl border border-white/10">
-                            No published builds. Use the form on the left to publish your first build.
-                        </div>
-                    `;
-                } else {
-                    buildsList.innerHTML = state.builds.map(build => `
-                        <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 rounded-xl p-3">
-                            <div class="flex items-center gap-3 min-w-0">
-                                <img src="${build.imageUrl || 'https://placehold.co/120x80/14181F/FF3B1D?text=BR01'}"
-                                     onerror="this.src='https://placehold.co/120x80/14181F/FF3B1D?text=BR01'"
-                                     alt="${build.title}" class="w-16 h-12 rounded-lg object-cover shrink-0">
-                                <div class="min-w-0">
-                                    <div class="font-semibold text-white text-sm truncate">${build.title}</div>
-                                    <div class="text-[11px] text-crimson">${build.category}</div>
-                                    <div class="text-[11px] text-silver/60 truncate">${build.mods}</div>
-                                </div>
+                buildsList.innerHTML = state.builds.map(build => `
+                    <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 p-3 rounded-xl">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <img src="${build.image}" onerror="this.src='https://placehold.co/100x100/14181F/FF3B1D?text=BR01'" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
+                            <div class="min-w-0">
+                                <div class="font-semibold text-white text-sm truncate">${build.title}</div>
+                                <div class="text-[11px] text-crimson font-medium">${build.category}</div>
+                                <div class="text-xs text-silver/70 truncate">${build.mods}</div>
                             </div>
-                            <button onclick="deleteBuild('${build.id}')" aria-label="Delete Build"
-                                    class="shrink-0 bg-crimson/15 hover:bg-crimson text-crimson hover:text-white px-3 py-2 rounded-lg text-xs font-semibold transition-colors">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
                         </div>
-                    `).join('');
-                }
+                        <button onclick="deleteBuild('${build.id}')" class="text-silver/60 hover:text-crimson p-2 shrink-0" title="Remove Build">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `).join('');
             }
         }
 
-        // Cost Estimator Calculation & WhatsApp Sync
-        function updateEstimatorSummary() {
-            const checkedBoxes = Array.from(document.querySelectorAll('.est-checkbox:checked'));
-            let baseSum = 0;
-            let totalDays = 0;
-            const selectedNames = [];
-
-            document.querySelectorAll('.est-service-card').forEach(card => {
-                const cb = card.querySelector('.est-checkbox');
-                if (cb && cb.checked) {
-                    card.classList.add('border-crimson', 'bg-crimson/10');
-                    card.classList.remove('border-white/10', 'bg-obsidian');
-                    baseSum += Number(cb.dataset.base || 0);
-                    totalDays = Math.max(totalDays, Number(cb.dataset.days || 1));
-                    selectedNames.push(cb.value);
-                } else {
-                    card.classList.remove('border-crimson', 'bg-crimson/10');
-                    card.classList.add('border-white/10', 'bg-obsidian');
-                }
-            });
-
-            if (checkedBoxes.length > 1) {
-                totalDays += Math.floor((checkedBoxes.length - 1) * 0.5);
-            }
-
-            const low = Math.round(baseSum * state.segmentMultiplier);
-            const high = Math.round(low * 1.18);
-            const rangeText = low > 0 ? `₹${low.toLocaleString('en-IN')} – ₹${high.toLocaleString('en-IN')}` : "Select at least 1 service";
-            const daysText = totalDays > 0 ? `${totalDays} Working Day${totalDays > 1 ? 's' : ''}` : "—";
-
-            const priceDisplay = document.getElementById('est-price-display');
-            const turnaroundDisplay = document.getElementById('est-turnaround-display');
-            if (priceDisplay) priceDisplay.textContent = rangeText;
-            if (turnaroundDisplay) turnaroundDisplay.textContent = daysText;
-
-            const waPhone = state.settings.whatsappNumber || DEFAULT_WORKSHOP_PHONE;
-            const waText = encodeURIComponent(
-                `Hi BR01 Customs Patna! I generated an estimate on your website:\n` +
-                `• Segment: ${state.selectedSegment}\n` +
-                `• Services: ${selectedNames.join(', ') || 'Custom Consultation'}\n` +
-                `• Est. Range: ${rangeText}\n` +
-                `Please share slot availability.`
-            );
-            const directWaBtn = document.getElementById('direct-wa-quote-btn');
-            if (directWaBtn) directWaBtn.href = `https://wa.me/${waPhone}?text=${waText}`;
-
-            return { low, high, rangeText, daysText, selectedNames };
+        function renderAll() {
+            applySiteSettings();
+            renderBuildsGallery();
+            recalculateEstimator();
+            renderAdminDashboard();
         }
 
-        // Custom Calendar Picker Logic
-        function initCustomCalendar() {
+        // Global Admin Action Handlers
+        window.updateBookingStatus = async function(bookingId, newStatus) {
+            if (state.useCloud && state.db && state.user) {
+                const ref = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId);
+                await updateDoc(ref, { status: newStatus });
+            } else {
+                const item = state.bookings.find(b => b.id === bookingId);
+                if (item) item.status = newStatus;
+                renderAdminDashboard();
+            }
+            showToast(`Booking status updated to ${newStatus}`);
+        };
+
+        window.deleteBooking = async function(bookingId) {
+            if (state.useCloud && state.db && state.user) {
+                await deleteDoc(doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId));
+            } else {
+                state.bookings = state.bookings.filter(b => b.id !== bookingId);
+                renderAdminDashboard();
+            }
+            showToast("Booking removed.");
+        };
+
+        window.deleteBuild = async function(buildId) {
+            if (state.useCloud && state.db && state.user) {
+                await deleteDoc(doc(state.db, 'artifacts', state.appId, 'public', 'data', 'builds', buildId));
+            } else {
+                state.builds = state.builds.filter(b => b.id !== buildId);
+                renderBuildsGallery();
+                renderAdminDashboard();
+            }
+            showToast("Build removed from public gallery.");
+        };
+
+        window.saveSiteSettings = async function() {
+            const text = document.getElementById('admin-banner-input').value.trim();
+            const visible = document.getElementById('admin-banner-toggle').checked;
+            const rawWa = document.getElementById('cfg-whatsapp')?.value.trim() || getActiveWhatsApp();
+            const cleanWa = rawWa.replace(/[^0-9]/g, '') || DEFAULT_WORKSHOP_PHONE;
+            const formattedWa = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
+            const receiverEmail = document.getElementById('cfg-email')?.value.trim() || "";
+            const newPin = (document.getElementById('cfg-admin-pin')?.value.trim() || getActiveAdminPin());
+
+            state.settings = {
+                ...state.settings,
+                bannerText: text,
+                bannerVisible: visible,
+                whatsappNumber: formattedWa,
+                receiverEmail,
+                adminPin: newPin
+            };
+
+            if (state.useCloud && state.db && state.user) {
+                const settingsDoc = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'settings', 'global');
+                await setDoc(settingsDoc, state.settings, { merge: true });
+            }
+            applySiteSettings();
+            showToast("Settings, WhatsApp routing & Admin PIN saved live!");
+        };
+
+        window.setPresetCarImg = function(url) {
+            document.getElementById('new-build-image').value = url;
+        };
+
+        // Admin Modal & View Navigation
+        window.openAdminModal = function() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeAdminModal = function() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.exitAdminDashboard = function() {
+            document.getElementById('admin-dashboard-view').classList.add('hidden');
+            document.getElementById('public-site-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // DOM Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Custom Month-View Calendar Setup for Preferred Date
             const dateInput = document.getElementById('cust-date');
-            const openBtn = document.getElementById('open-calendar-btn');
-            const popup = document.getElementById('custom-calendar-popup');
-            const monthYearLabel = document.getElementById('cal-month-year');
-            const daysGrid = document.getElementById('cal-days-grid');
-            const prevBtn = document.getElementById('cal-prev-month');
-            const nextBtn = document.getElementById('cal-next-month');
+            const openCalBtn = document.getElementById('open-calendar-btn');
+            const calPopup = document.getElementById('custom-calendar-popup');
+            const calMonthYear = document.getElementById('cal-month-year');
+            const calDaysGrid = document.getElementById('cal-days-grid');
+            const prevMonthBtn = document.getElementById('cal-prev-month');
+            const nextMonthBtn = document.getElementById('cal-next-month');
 
-            if (!dateInput || !popup || !daysGrid) return;
+            const now = new Date();
+            const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            let viewYear = selectedDate.getFullYear();
+            let viewMonth = selectedDate.getMonth();
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            let viewYear = today.getFullYear();
-            let viewMonth = today.getMonth();
+            function formatISO(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            }
 
             function renderCalendar() {
+                if (!calMonthYear || !calDaysGrid) return;
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                monthYearLabel.textContent = `${monthNames[viewMonth]} ${viewYear}`;
-                daysGrid.innerHTML = "";
+                calMonthYear.textContent = `${monthNames[viewMonth]} ${viewYear}`;
 
-                const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+                const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
                 const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+                const selectedISO = formatISO(selectedDate);
+                const minISO = formatISO(minDate);
 
-                for (let i = 0; i < firstDay; i++) {
-                    const spacer = document.createElement('div');
-                    daysGrid.appendChild(spacer);
+                let html = "";
+                for (let i = 0; i < firstDayIndex; i++) {
+                    html += `<span></span>`;
                 }
 
                 for (let day = 1; day <= daysInMonth; day++) {
                     const cellDate = new Date(viewYear, viewMonth, day);
-                    const yyyy = cellDate.getFullYear();
-                    const mm = String(cellDate.getMonth() + 1).padStart(2, '0');
-                    const dd = String(day).padStart(2, '0');
-                    const isoStr = `${yyyy}-${mm}-${dd}`;
+                    const cellISO = formatISO(cellDate);
+                    const isPast = cellISO < minISO;
+                    const isSelected = cellISO === selectedISO;
 
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.textContent = day;
-
-                    if (cellDate < today) {
-                        btn.disabled = true;
-                        btn.className = "py-1.5 rounded-lg text-silver/25 cursor-not-allowed";
+                    if (isPast) {
+                        html += `<button type="button" disabled class="h-8 w-8 rounded-lg text-silver/25 cursor-not-allowed">${day}</button>`;
+                    } else if (isSelected) {
+                        html += `<button type="button" data-date="${cellISO}" class="cal-day-btn h-8 w-8 rounded-lg bg-crimson text-white font-bold">${day}</button>`;
                     } else {
-                        const isSelected = dateInput.value === isoStr;
-                        btn.className = isSelected
-                            ? "py-1.5 rounded-lg bg-crimson text-white font-bold"
-                            : "py-1.5 rounded-lg text-silver hover:bg-crimson hover:text-white transition-colors";
-                        btn.addEventListener('click', () => {
-                            dateInput.value = isoStr;
-                            popup.classList.add('hidden');
-                            renderCalendar();
-                        });
+                        html += `<button type="button" data-date="${cellISO}" class="cal-day-btn h-8 w-8 rounded-lg text-white hover:bg-steel transition-colors">${day}</button>`;
                     }
-                    daysGrid.appendChild(btn);
                 }
-            }
 
-            const togglePopup = (e) => {
-                e.stopPropagation();
-                renderCalendar();
-                popup.classList.toggle('hidden');
-            };
+                calDaysGrid.innerHTML = html;
 
-            dateInput.addEventListener('click', togglePopup);
-            if (openBtn) openBtn.addEventListener('click', togglePopup);
-
-            prevBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                viewMonth--;
-                if (viewMonth < 0) {
-                    viewMonth = 11;
-                    viewYear--;
-                }
-                renderCalendar();
-            });
-
-            nextBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                viewMonth++;
-                if (viewMonth > 11) {
-                    viewMonth = 0;
-                    viewYear++;
-                }
-                renderCalendar();
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!popup.contains(e.target) && e.target !== dateInput && e.target !== openBtn) {
-                    popup.classList.add('hidden');
-                }
-            });
-        }
-
-        // Global Functions Exposed to HTML Event Handlers
-        window.preselectService = (serviceName) => {
-            document.querySelectorAll('.est-checkbox').forEach(cb => {
-                if (cb.value === serviceName) cb.checked = true;
-            });
-            updateEstimatorSummary();
-        };
-
-        window.setPresetCarImg = (url) => {
-            const input = document.getElementById('new-build-image');
-            if (input) input.value = url;
-        };
-
-        window.updateBookingStatus = async (bookingId, newStatus) => {
-            try {
-                if (state.useCloud && state.db) {
-                    const ref = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId);
-                    await updateDoc(ref, { status: newStatus });
-                } else {
-                    const item = state.bookings.find(b => b.id === bookingId);
-                    if (item) item.status = newStatus;
-                    saveLocalState();
-                    renderAdminDashboard();
-                }
-                showToast(`Booking status updated to ${newStatus}`);
-            } catch (err) {
-                console.error("Update status error:", err);
-                showToast("Error updating booking status");
-            }
-        };
-
-        window.deleteBooking = async (bookingId) => {
-            try {
-                if (state.useCloud && state.db) {
-                    const ref = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId);
-                    await deleteDoc(ref);
-                } else {
-                    state.bookings = state.bookings.filter(b => b.id !== bookingId);
-                    saveLocalState();
-                    renderAdminDashboard();
-                }
-                showToast("Booking removed from queue");
-            } catch (err) {
-                console.error("Delete booking error:", err);
-                showToast("Error deleting booking");
-            }
-        };
-
-        window.deleteBuild = async (buildId) => {
-            try {
-                if (state.useCloud && state.db) {
-                    const ref = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'builds', buildId);
-                    await deleteDoc(ref);
-                } else {
-                    state.builds = state.builds.filter(b => b.id !== buildId);
-                    saveLocalState();
-                    renderBuildsGallery();
-                    renderAdminDashboard();
-                }
-                showToast("Build removed from portfolio");
-            } catch (err) {
-                console.error("Delete build error:", err);
-                showToast("Error deleting build");
-            }
-        };
-
-        window.saveSiteSettings = async () => {
-            const bannerInput = document.getElementById('admin-banner-input');
-            const bannerToggle = document.getElementById('admin-banner-toggle');
-            const cfgWhatsapp = document.getElementById('cfg-whatsapp');
-            const cfgEmail = document.getElementById('cfg-email');
-            const cfgPin = document.getElementById('cfg-admin-pin');
-
-            const updated = {
-                bannerText: bannerInput ? bannerInput.value.trim() : state.settings.bannerText,
-                bannerVisible: bannerToggle ? bannerToggle.checked : state.settings.bannerVisible,
-                whatsappNumber: (cfgWhatsapp && cfgWhatsapp.value.trim()) ? cfgWhatsapp.value.trim().replace(/\D/g, '') : state.settings.whatsappNumber,
-                receiverEmail: cfgEmail ? cfgEmail.value.trim() : state.settings.receiverEmail,
-                adminPin: (cfgPin && cfgPin.value.trim().length >= 4) ? cfgPin.value.trim() : state.settings.adminPin
-            };
-
-            state.settings = { ...state.settings, ...updated };
-            if (cfgPin) cfgPin.value = "";
-
-            try {
-                if (state.useCloud && state.db) {
-                    const settingsDoc = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'settings', 'general');
-                    await setDoc(settingsDoc, state.settings, { merge: true });
-                } else {
-                    saveLocalState();
-                }
-                applySiteSettings();
-                showToast("Live site settings saved!");
-            } catch (err) {
-                console.error("Save settings error:", err);
-                showToast("Error saving settings");
-            }
-        };
-
-        window.openAdminModal = () => {
-            const modal = document.getElementById('admin-login-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                const pinInput = document.getElementById('admin-pin-input');
-                if (pinInput) {
-                    pinInput.value = "";
-                    pinInput.focus();
-                }
-            }
-        };
-
-        window.closeAdminModal = () => {
-            const modal = document.getElementById('admin-login-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-            if (window.location.hash === '#admin') {
-                history.replaceState(null, '', window.location.pathname + window.location.search);
-            }
-        };
-
-        window.exitAdminDashboard = () => {
-            document.getElementById('admin-dashboard-view').classList.add('hidden');
-            document.getElementById('public-site-view').classList.remove('hidden');
-            history.replaceState(null, '', window.location.pathname + window.location.search);
-        };
-
-        // Wire Up All UI Events on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu Toggle
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-                document.querySelectorAll('.mobile-link').forEach(link => {
-                    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+                calDaysGrid.querySelectorAll('.cal-day-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const [y, m, d] = btn.dataset.date.split('-').map(Number);
+                        selectedDate = new Date(y, m - 1, d);
+                        if (dateInput) dateInput.value = btn.dataset.date;
+                        renderCalendar();
+                        calPopup?.classList.add('hidden');
+                    });
                 });
             }
 
-            // Car Segment Buttons
+            if (dateInput) {
+                dateInput.value = formatISO(selectedDate);
+                dateInput.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewYear = selectedDate.getFullYear();
+                    viewMonth = selectedDate.getMonth();
+                    renderCalendar();
+                    calPopup?.classList.toggle('hidden');
+                });
+            }
+
+            if (openCalBtn) {
+                openCalBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewYear = selectedDate.getFullYear();
+                    viewMonth = selectedDate.getMonth();
+                    renderCalendar();
+                    calPopup?.classList.toggle('hidden');
+                });
+            }
+
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewMonth--;
+                    if (viewMonth < 0) {
+                        viewMonth = 11;
+                        viewYear--;
+                    }
+                    renderCalendar();
+                });
+            }
+
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewMonth++;
+                    if (viewMonth > 11) {
+                        viewMonth = 0;
+                        viewYear++;
+                    }
+                    renderCalendar();
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (calPopup && !calPopup.contains(e.target) && e.target !== dateInput && !openCalBtn?.contains(e.target)) {
+                    calPopup.classList.add('hidden');
+                }
+            });
+
+            renderCalendar();
+            renderAll();
+            initBackend();
+
+            // Open Admin modal privately when URL contains #admin
+            const checkAdminHash = () => {
+                if (window.location.hash.toLowerCase() === '#admin') {
+                    openAdminModal();
+                }
+            };
+            checkAdminHash();
+            window.addEventListener('hashchange', checkAdminHash);
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.toggle('hidden');
+                });
+            }
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+            });
+
+            // Car Segment Selector
             document.querySelectorAll('.segment-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.segment-btn').forEach(b => {
-                        b.classList.remove('active', 'border-crimson', 'bg-crimson/15');
+                        b.classList.remove('border-crimson', 'bg-crimson/15');
                         b.classList.add('border-white/10', 'bg-obsidian');
+                        b.querySelector('i').classList.remove('text-crimson');
+                        b.querySelector('i').classList.add('text-silver');
                     });
-                    btn.classList.add('active', 'border-crimson', 'bg-crimson/15');
+                    btn.classList.add('border-crimson', 'bg-crimson/15');
                     btn.classList.remove('border-white/10', 'bg-obsidian');
+                    btn.querySelector('i').classList.add('text-crimson');
+                    btn.querySelector('i').classList.remove('text-silver');
+
                     state.selectedSegment = btn.dataset.segment;
-                    state.segmentMultiplier = parseFloat(btn.dataset.multiplier || '1.0');
-                    updateEstimatorSummary();
+                    state.segmentMultiplier = parseFloat(btn.dataset.multiplier);
+                    recalculateEstimator();
                 });
             });
 
-            // Service Checkboxes
+            // Estimator Checkboxes & Car Model Input
             document.querySelectorAll('.est-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateEstimatorSummary);
+                cb.addEventListener('change', recalculateEstimator);
+            });
+            document.getElementById('cust-car').addEventListener('input', recalculateEstimator);
+
+            // Booking Form Submit (Saves to Firestore + Local State)
+            document.getElementById('booking-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const { minPrice, maxPrice, selectedNames } = recalculateEstimator();
+                const name = document.getElementById('cust-name').value.trim();
+                const phone = document.getElementById('cust-phone').value.trim();
+                const email = document.getElementById('cust-email').value.trim();
+                const carModel = document.getElementById('cust-car').value.trim();
+                const preferredDate = document.getElementById('cust-date').value;
+
+                const bookingPayload = {
+                    name,
+                    phone,
+                    email,
+                    carModel,
+                    segment: state.selectedSegment,
+                    services: selectedNames.length > 0 ? selectedNames : ["General Consultation"],
+                    estimatedMin: minPrice,
+                    estimatedMax: maxPrice,
+                    preferredDate,
+                    status: "Pending",
+                    createdAt: Date.now()
+                };
+
+                // Send quote silently to email via Web3Forms
+                fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({
+                        access_key: WEB3FORMS_ACCESS_KEY,
+                        subject: `New BR01 Customs Quote: ${carModel} (${name})`,
+                        from_name: "BR01 Customs Website",
+                        ...(state.settings.receiverEmail ? { replyto: state.settings.receiverEmail } : {}),
+                        Customer_Name: name,
+                        Phone_WhatsApp: phone,
+                        Customer_Email: email,
+                        Car_Model: `${carModel} (${state.selectedSegment})`,
+                        Requested_Services: bookingPayload.services.join(", "),
+                        Estimated_Quote: `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`,
+                        Preferred_Date: preferredDate
+                    })
+                }).catch(err => console.error("Email notification error:", err));
+
+                if (state.useCloud && state.db && state.user) {
+                    const bookingsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings');
+                    await addDoc(bookingsCol, bookingPayload);
+                } else {
+                    state.bookings.unshift({ id: `local-${Date.now()}`, ...bookingPayload });
+                    renderAdminDashboard();
+                }
+
+                // Prepare 1-Click WhatsApp Forward
+                const waSummary = `Hi BR01 Customs Patna! 🏁\nI just booked a slot on your website:\n\n• Name: ${name}\n• Phone: ${phone}\n• Car: ${carModel} (${state.selectedSegment})\n• Services: ${bookingPayload.services.join(', ')}\n• Est. Quote: ₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}\n• Preferred Date: ${preferredDate}`;
+                document.getElementById('post-booking-wa-btn').href = `https://wa.me/${getActiveWhatsApp()}?text=${encodeURIComponent(waSummary)}`;
+                document.getElementById('booking-success-box').classList.remove('hidden');
+
+                showToast("Slot saved to BR01 Customs live queue!");
             });
 
             // Gallery Filter Pills
             document.querySelectorAll('.build-filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.build-filter-btn').forEach(b => {
-                        b.classList.remove('active', 'bg-crimson', 'text-white');
-                        b.classList.add('bg-gunmetal', 'text-silver');
+                        b.classList.remove('bg-crimson', 'text-white');
+                        b.classList.add('bg-gunmetal', 'text-silver', 'border', 'border-white/10');
                     });
-                    btn.classList.add('active', 'bg-crimson', 'text-white');
-                    btn.classList.remove('bg-gunmetal', 'text-silver');
+                    btn.classList.add('bg-crimson', 'text-white');
+                    btn.classList.remove('bg-gunmetal', 'text-silver', 'border', 'border-white/10');
+
                     state.activeBuildFilter = btn.dataset.filter;
                     renderBuildsGallery();
                 });
             });
 
-            // Booking Form Submission
-            const bookingForm = document.getElementById('booking-form');
-            if (bookingForm) {
-                bookingForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('cust-name').value.trim();
-                    const phone = document.getElementById('cust-phone').value.trim();
-                    const email = document.getElementById('cust-email').value.trim();
-                    const carModel = document.getElementById('cust-car').value.trim();
-                    const preferredDate = document.getElementById('cust-date').value.trim();
-
-                    if (!preferredDate) {
-                        showToast("Please select a preferred date from the calendar");
-                        return;
-                    }
-
-                    const est = updateEstimatorSummary();
-                    const bookingData = {
-                        name,
-                        phone,
-                        email: email || "",
-                        carModel,
-                        segment: state.selectedSegment,
-                        services: est.selectedNames.length ? est.selectedNames : ["Custom Consultation"],
-                        estimateRange: est.rangeText,
-                        numericEstimate: est.low,
-                        preferredDate,
-                        status: "Pending",
-                        createdAt: Date.now()
-                    };
-
-                    try {
-                        if (state.useCloud && state.db) {
-                            const bookingsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings');
-                            await addDoc(bookingsCol, bookingData);
-                        } else {
-                            state.bookings.unshift({ id: `local-${Date.now()}`, ...bookingData });
-                            saveLocalState();
-                            renderAdminDashboard();
-                        }
-
-                        // Optional Web3Forms Email Notification
-                        try {
-                            await fetch("https://api.web3forms.com/submit", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json", Accept: "application/json" },
-                                body: JSON.stringify({
-                                    access_key: WEB3FORMS_ACCESS_KEY,
-                                    subject: `New BR01 Customs Quote: ${carModel} (${name})`,
-                                    from_name: "BR01 Customs Website",
-                                    name,
-                                    phone,
-                                    email: email || "Not provided",
-                                    car: `${carModel} (${state.selectedSegment})`,
-                                    services: bookingData.services.join(', '),
-                                    estimate: est.rangeText,
-                                    preferred_date: preferredDate
-                                })
-                            });
-                        } catch (mailErr) {
-                            console.warn("Web3Forms background dispatch skipped:", mailErr);
-                        }
-
-                        const waPhone = state.settings.whatsappNumber || DEFAULT_WORKSHOP_PHONE;
-                        const waMessage = encodeURIComponent(
-                            `New Slot Booking — BR01 Customs Patna\n` +
-                            `Name: ${name}\n` +
-                            `Phone: ${phone}\n` +
-                            `Car: ${carModel} (${state.selectedSegment})\n` +
-                            `Services: ${bookingData.services.join(', ')}\n` +
-                            `Est. Quote: ${est.rangeText}\n` +
-                            `Preferred Date: ${preferredDate}`
-                        );
-                        const postWaBtn = document.getElementById('post-booking-wa-btn');
-                        if (postWaBtn) postWaBtn.href = `https://wa.me/${waPhone}?text=${waMessage}`;
-
-                        document.getElementById('booking-success-box').classList.remove('hidden');
-                        bookingForm.reset();
-                        showToast("Quote saved & slot reserved!");
-                    } catch (err) {
-                        console.error("Booking save error:", err);
-                        showToast("Could not save booking. Please try WhatsApp.");
-                    }
-                });
-            }
-
-            // Photo Upload & Add Build Form
-            const fileInput = document.getElementById('new-build-file');
-            const previewWrap = document.getElementById('new-build-preview-wrap');
-            const previewImg = document.getElementById('new-build-preview-img');
-            const fileLabel = document.getElementById('build-file-label');
-            const clearFileBtn = document.getElementById('clear-build-file-btn');
-
-            if (fileInput) {
-                fileInput.addEventListener('change', async (e) => {
-                    const file = e.target.files && e.target.files[0];
-                    if (!file) return;
-                    try {
-                        const compressed = await compressImageFile(file);
-                        state.uploadedBuildDataUrl = compressed;
-                        if (previewImg) previewImg.src = compressed;
-                        if (previewWrap) previewWrap.classList.remove('hidden');
-                        if (fileLabel) fileLabel.textContent = file.name;
-                    } catch (err) {
-                        console.error("Image processing error:", err);
-                        showToast("Could not process selected image");
-                    }
-                });
-            }
-
-            if (clearFileBtn) {
-                clearFileBtn.addEventListener('click', () => {
-                    state.uploadedBuildDataUrl = "";
-                    if (fileInput) fileInput.value = "";
-                    if (previewWrap) previewWrap.classList.add('hidden');
-                    if (fileLabel) fileLabel.textContent = "Click to select JPG or PNG photo";
-                });
-            }
-
-            const addBuildForm = document.getElementById('add-build-form');
-            if (addBuildForm) {
-                addBuildForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const title = document.getElementById('new-build-title').value.trim();
-                    const category = document.getElementById('new-build-category').value;
-                    const mods = document.getElementById('new-build-mods').value.trim();
-                    const urlInput = document.getElementById('new-build-image').value.trim();
-                    const imageUrl = state.uploadedBuildDataUrl || urlInput || "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80";
-
-                    const newBuild = {
-                        title,
-                        category,
-                        mods,
-                        imageUrl,
-                        createdAt: Date.now()
-                    };
-
-                    try {
-                        if (state.useCloud && state.db) {
-                            const buildsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'builds');
-                            await addDoc(buildsCol, newBuild);
-                        } else {
-                            state.builds.unshift({ id: `build-${Date.now()}`, ...newBuild });
-                            saveLocalState();
-                            renderBuildsGallery();
-                            renderAdminDashboard();
-                        }
-
-                        addBuildForm.reset();
-                        state.uploadedBuildDataUrl = "";
-                        if (previewWrap) previewWrap.classList.add('hidden');
-                        if (fileLabel) fileLabel.textContent = "Click to select JPG or PNG photo";
-                        showToast("New build published to gallery!");
-                    } catch (err) {
-                        console.error("Publish build error:", err);
-                        showToast("Error publishing build");
-                    }
-                });
-            }
-
-            // Admin PIN Login Form
-            const adminPinForm = document.getElementById('admin-pin-form');
-            if (adminPinForm) {
-                adminPinForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const entered = document.getElementById('admin-pin-input').value.trim();
-                    const errorEl = document.getElementById('admin-pin-error');
-                    if (entered === (state.settings.adminPin || DEFAULT_ADMIN_PIN)) {
-                        if (errorEl) errorEl.classList.add('hidden');
-                        window.closeAdminModal();
-                        document.getElementById('public-site-view').classList.add('hidden');
-                        document.getElementById('admin-dashboard-view').classList.remove('hidden');
-                        renderAdminDashboard();
-                    } else if (errorEl) {
-                        errorEl.classList.remove('hidden');
-                    }
-                });
-            }
-
-            // Check #admin hash on load & hashchange
-            const checkAdminHash = () => {
-                if (window.location.hash === '#admin') {
-                    window.openAdminModal();
+            // Admin PIN Form Submit
+            document.getElementById('admin-pin-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pin = document.getElementById('admin-pin-input').value.trim();
+                if (pin === getActiveAdminPin()) {
+                    document.getElementById('admin-pin-error').classList.add('hidden');
+                    document.getElementById('admin-pin-input').value = '';
+                    closeAdminModal();
+                    document.getElementById('public-site-view').classList.add('hidden');
+                    document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                    renderAdminDashboard();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    document.getElementById('admin-pin-error').classList.remove('hidden');
                 }
-            };
-            window.addEventListener('hashchange', checkAdminHash);
-            checkAdminHash();
+            });
 
-            initCustomCalendar();
-            updateEstimatorSummary();
-            initFirebaseBackend();
+            // Add New Build Form (Admin Panel)
+            document.getElementById('add-build-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('new-build-title').value.trim();
+                const category = document.getElementById('new-build-category').value;
+                const mods = document.getElementById('new-build-mods').value.trim();
+                const image = document.getElementById('new-build-image').value.trim() || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=1000&q=80";
+
+                const newBuild = {
+                    title,
+                    category,
+                    mods,
+                    image,
+                    createdAt: Date.now()
+                };
+
+                if (state.useCloud && state.db && state.user) {
+                    const buildsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'builds');
+                    await addDoc(buildsCol, newBuild);
+                } else {
+                    state.builds.unshift({ id: `build-${Date.now()}`, ...newBuild });
+                    renderBuildsGallery();
+                    renderAdminDashboard();
+                }
+
+                e.target.reset();
+                showToast("New build published to live gallery!");
+            });
         });
     </script>
 </body>
 </html>
 </body>
-</html>
