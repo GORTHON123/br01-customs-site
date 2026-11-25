@@ -1756,27 +1756,32 @@
                             renderAdminDashboard();
                         }
 
-                        // Optional Web3Forms Email Notification
-                        try {
-                            await fetch("https://api.web3forms.com/submit", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json", Accept: "application/json" },
-                                body: JSON.stringify({
-                                    access_key: "73f17188-1be0-4d50-afc9-bdd7310a0de3",
-                                    subject: `New BR01 Customs Quote: ${carModel} (${name})`,
-                                    from_name: "BR01 Customs Website",
-                                    name,
-                                    phone,
-                                    email: email || "Not provided",
-                                    car: `${carModel} (${state.selectedSegment})`,
-                                    services: bookingData.services.join(', '),
-                                    estimate: est.rangeText,
-                                    preferred_date: preferredDate
-                                })
-                            });
-                        } catch (mailErr) {
-                            console.warn("Web3Forms background dispatch skipped:", mailErr);
-                        }
+                        // Send quote silently to email via Web3Forms
+                fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({
+                        access_key: "73f17188-1be0-4d50-afc9-bdd7310a0de3",
+                        subject: `New BR01 Customs Quote: ${carModel} (${name})`,
+                        from_name: "BR01 Customs Website",
+                        ...(state.settings.receiverEmail ? { replyto: state.settings.receiverEmail } : {}),
+                        Customer_Name: name,
+                        Phone_WhatsApp: phone,
+                        Customer_Email: email,
+                        Car_Model: `${carModel} (${state.selectedSegment})`,
+                        Requested_Services: bookingPayload.services.join(", "),
+                        Estimated_Quote: `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`,
+                        Preferred_Date: preferredDate
+                    })
+                }).catch(err => console.error("Email notification error:", err));
+
+                if (state.useCloud && state.db && state.user) {
+                    const bookingsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings');
+                    await addDoc(bookingsCol, bookingPayload);
+                } else {
+                    state.bookings.unshift({ id: `local-${Date.now()}`, ...bookingPayload });
+                    renderAdminDashboard();
+                }
 
                         const waPhone = state.settings.whatsappNumber || DEFAULT_WORKSHOP_PHONE;
                         const waMessage = encodeURIComponent(
@@ -1910,5 +1915,3 @@
     </script>
 </body>
 </html>
-</html>
-</body>
