@@ -1157,30 +1157,7 @@
             recalculateEstimator();
             renderBuildsGallery();
         }
-
-        // Attach Firestore Real-Time Listeners (Strictly following RULE 1 & RULE 2)
-        function attachRealtimeListeners() {
-            if (!state.db || !state.user) return;
-            const appId = state.appId;
-
-            // 1. Public Builds Collection
-            const buildsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'builds');
-            onSnapshot(buildsCol, (snapshot) => {
-                if (snapshot.empty) {
-                    // Seed initial builds to Firestore once
-                    SEED_BUILDS.forEach(async (b) => {
-                        await setDoc(doc(state.db, 'artifacts', appId, 'public', 'data', 'builds', b.id), b);
-                    });
-                } else {
-                    const items = [];
-                    snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-                    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    state.builds = items;
-                    renderBuildsGallery();
-                    renderAdminDashboard();
-                }
-            }, (error) => console.error("Builds snapshot error:", error));
-
+        
             // 2. Public Bookings Collection
             const bookingsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'bookings');
             onSnapshot(bookingsCol, (snapshot) => {
