@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BR01 Customs | Bihar's First Performance & Tuning Workshop — Patna</title>
+    <meta name="description" content="BR01 Customs at Sri Krishna Puri, Boring Road, Patna. Authorized dealer for Mark Performance Exhaust, BMC Air Filters, Dr.Nano Suspension & Xenon_it. Book ECU tuning, PPF, wraps & servicing.">
+    
+    <!-- Google Fonts: Oswald & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0B0D10',
+                        gunmetal: '#14181F',
+                        steel: '#1D232D',
+                        crimson: '#FF3B1D',
+                        crimsonDark: '#D92B10',
+                        silver: '#C9D1D9'
+                        
+                    },
+                    fontFamily: {
+                        display: ['Oswald', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0D10;
+            color: #C9D1D9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .carbon-bg {
+            background-color: #0B0D10;
+            background-image: 
+                radial-gradient(#1a2029 1px, transparent 1px),
+                radial-gradient(#1a2029 1px, #0B0D10 1px);
+            background-size: 22px 22px;
+            background-position: 0 0, 11px 11px;
+        }
+
+        .glass-nav {
+            background: rgba(11, 13, 16, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .crimson-glow {
+            box-shadow: 0 0 25px rgba(255, 59, 29, 0.35);
+        }
+
+        .crimson-glow-hover:hover {
+            box-shadow: 0 0 32px rgba(255, 59, 29, 0.55);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0D10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262E3B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF3B1D;
+        }
+    </style>
+</head>
+<body class="carbon-bg antialiased selection:bg-crimson selection:text-white">
+
+    <!-- ===================================================================== -->
+    <!-- PUBLIC CUSTOMER-FACING WEBSITE VIEW                                   -->
+    <!-- ===================================================================== -->
+    <div id="public-site-view">
+
+        <!-- 1. DYNAMIC TOP PROMO / OFFER BANNER (Controlled via Admin Panel) -->
+        <div id="promo-banner" class="bg-gradient-to-r from-crimsonDark via-crimson to-orange-600 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium relative z-50 transition-all">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 pr-6">
+                <span id="promo-banner-text">🔥 MONSOON &amp; FESTIVE OFFER: 15% OFF Full Body PPF &amp; Ceramic Coating — Book Your Slot Today</span>
+                <a href="#cost-estimator" class="underline font-bold hover:text-black transition-colors ml-1">Claim Slot &rarr;</a>
+            </div>
+            <button onclick="document.getElementById('promo-banner').classList.add('hidden')" aria-label="Close banner" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- 2. STICKY NAVIGATION BAR -->
+        <header class="sticky top-0 z-40 glass-nav border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16 sm:h-20">
+                    <!-- Brand Logo -->
+                    <a href="#" class="flex items-center gap-3 group">
+                        <div class="w-9 h-9 bg-crimson rounded flex items-center justify-center font-display font-bold text-xl italic tracking-tighter text-white">
+                        BR01
+                      </div>
+                
+                        <div>
+                            <span class="font-display font-bold text-xl sm:text-2xl tracking-wider text-white uppercase block leading-none">
+                                BR01 <span class="text-crimson">CUSTOMS</span>
+                            </span>
+                            <span class="text-[10px] sm:text-xs text-silver/70 tracking-widest uppercase block mt-0.5">
+                                #DriveBeyondOrdinary &bull; Patna
+                            </span>
+                        </div>
+                    </a>
+
+                    <!-- Desktop Nav Links -->
+                    <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-silver">
+                        <a href="#services" class="hover:text-crimson transition-colors">Services</a>
+                        <a href="#cost-estimator" class="hover:text-crimson transition-colors">Cost Estimator</a>
+                        <a href="#recent-builds" class="hover:text-crimson transition-colors">Recent Builds</a>
+                        <a href="#location" class="hover:text-crimson transition-colors">Location &amp; Hours</a>
+                    </nav>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <a href="#cost-estimator" class="bg-crimson hover:bg-crimsonDark text-white font-semibold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-lg flex items-center gap-2 transition-all crimson-glow-hover">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>Book Slot</span>
+                        </a>
+                        <!-- Mobile Menu Toggle -->
+                        <button id="mobile-menu-btn" aria-label="Toggle Menu" class="lg:hidden text-silver hover:text-white p-2 rounded-lg bg-gunmetal border border-white/10">
+                            <i class="fa-solid fa-bars text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown Navigation -->
+            <div id="mobile-menu" class="hidden lg:hidden bg-gunmetal border-b border-white/10 px-4 pt-2 pb-5 space-y-2">
+                <a href="#services" class="mobile-link block px-3 py-2.5 rounded-lg text-white hover:bg-steel hover:text-crimson font-medium">Core Services</a>
+                <a href="#cost-estimator" class="mobile-link block px-3 py-2.5 rounded-lg text-white hover:bg-steel hover:text-crimson font-medium">Build Cost Estimator &amp; Booking</a>
+                <a href="#recent-builds" class="mobile-link block px-3 py-2.5 rounded-lg text-white hover:bg-steel hover:text-crimson font-medium">Recent Builds Gallery</a>
+                <a href="#location" class="mobile-link block px-3 py-2.5 rounded-lg text-white hover:bg-steel hover:text-crimson font-medium">Location &amp; Hours</a>
+            </div>
+        </header>
+
+        <!-- 3. HERO SECTION -->
+        <section class="relative min-h-[90vh] flex items-center overflow-hidden border-b border-white/10">
+            <!-- Background Automotive Image -->
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=2000&q=80" 
+                     onerror="this.src='https://placehold.co/1920x1080/14181F/FF3B1D?text=BR01+CUSTOMS+PATNA'"
+                     alt="Custom Performance Car at BR01 Customs Patna" 
+                     class="w-full h-full object-cover object-center opacity-40 scale-105">
+                <div class="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/90 to-obsidian/40"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full">
+                <div class="max-w-3xl">
+                    <!-- Tagline Pill -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gunmetal/95 border border-crimson/50 text-xs sm:text-sm font-bold tracking-wider uppercase text-white mb-6">
+                        <span class="w-2 h-2 rounded-full bg-crimson animate-ping"></span>
+                        <span>BIHAR'S FIRST PERFORMANCE &amp; TUNING WORKSHOP</span>
+                    </div>
+
+                    <!-- Headline -->
+                    <h1 class="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-white uppercase tracking-tight leading-[1.06] mb-6">
+                        <span class="text-crimson">#DriveBeyondOrdinary</span> — Precision Tuning, Custom Exhausts &amp; Bespoke Detailing in Patna
+                    </h1>
+
+                    <!-- Subheadline with 4.8★ rating & Authorized Dealerships -->
+                    <p class="text-silver text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
+                        Rated <strong class="text-white">4.8★ across 90+ automotive enthusiasts</strong> in Patna. Authorized performance partners for <strong class="text-white">Mark Performance Racing Exhaust</strong>, <strong class="text-white">BMC Air Filters</strong>, <strong class="text-white">Dr.Nano Suspension</strong>, and <strong class="text-white">Xenon_it</strong>.
+                    </p>
+
+                    <!-- Dual CTAs -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                        <a href="#cost-estimator" class="bg-crimson hover:bg-crimsonDark text-white font-display font-semibold uppercase tracking-wider text-base sm:text-lg px-8 py-4 rounded-xl text-center transition-all crimson-glow flex items-center justify-center gap-2.5">
+                            <i class="fa-solid fa-calendar-plus"></i>
+                            <span>Book Service Slot</span>
+                        </a>
+                        <a href="#recent-builds" class="bg-gunmetal/90 hover:bg-steel text-white border border-white/15 font-display font-semibold uppercase tracking-wider text-base sm:text-lg px-8 py-4 rounded-xl text-center transition-all flex items-center justify-center gap-2.5">
+                            <span>Explore Builds</span>
+                            <i class="fa-solid fa-arrow-right text-crimson"></i>
+                        </a>
+                    </div>
+
+                    <!-- Authorized Brand Badges -->
+                    <div class="pt-6 border-t border-white/10">
+                        <span class="text-[11px] uppercase tracking-widest text-silver/60 block mb-3">Authorized Dealership &amp; Performance Partners</span>
+                        <div class="flex flex-wrap gap-2.5 text-xs font-semibold text-white">
+                            <span class="bg-gunmetal border border-white/10 px-3 py-1.5 rounded-lg">Mark Performance Exhaust</span>
+                            <span class="bg-gunmetal border border-white/10 px-3 py-1.5 rounded-lg">BMC Air Filters</span>
+                            <span class="bg-gunmetal border border-white/10 px-3 py-1.5 rounded-lg">Dr.Nano Suspension</span>
+                            <span class="bg-gunmetal border border-white/10 px-3 py-1.5 rounded-lg">Xenon_it Lighting</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CORE SERVICES GRID -->
+        <section id="services" class="py-20 sm:py-28 border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <span class="text-crimson font-display font-semibold uppercase tracking-widest text-sm">Authorized Workshop Catalog</span>
+                        <h2 class="font-display font-bold text-3xl sm:text-5xl text-white uppercase tracking-tight mt-2">
+                            CORE PERFORMANCE &amp; STUDIO SERVICES
+                        </h2>
+                    </div>
+                    <p class="text-silver/80 text-sm sm:text-base max-w-md">
+                        Genuine hardware, calibrated ECU maps, and dust-free detailing bays right in Sri Krishna Puri, Boring Road.
+                    </p>
+                </div>
+
+                <!-- 6 Core Services Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Service 1 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-microchip"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-steel text-silver">Stage 1 &amp; 2</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                ECU Remapping &amp; Performance Tuning
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                Custom dyno-proven Stage 1 &amp; 2 ECU/TCU calibrations paired with BMC Air Filters for sharper throttle response and higher torque.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Starting From</span>
+                                <span class="font-display font-bold text-xl text-white">₹18,000+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('ECU Stage 1 Tune')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Add to Estimate &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-fire-flame-curved"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-steel text-silver">Authorized Dealer</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                Custom Racing Exhausts (Mark Performance)
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                Authorized Mark Performance Racing Exhausts, stainless downpipes, and remote-controlled Valvetronic systems with deep acoustic notes.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Starting From</span>
+                                <span class="font-display font-bold text-xl text-white">₹24,000+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('Custom Exhaust')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Add to Estimate &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-crimson/20 text-crimson">15% Offer Active</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                Full Body Wraps, PPF &amp; Ceramic Coating
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                Self-healing 200-micron TPU Paint Protection Film, 9H/10H Graphene Ceramic Coating, and 3M / Avery Dennison color change wraps.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Ceramic / PPF</span>
+                                <span class="font-display font-bold text-xl text-white">₹12,000 – ₹45,000+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('Full PPF')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Add to Estimate &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Service 4 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-gauge-high"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-steel text-silver">Dr.Nano Official</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                Dr.Nano Coil-overs &amp; Suspension Setup
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                Height &amp; damping adjustable Dr.Nano coil-overs, lowering springs, and 4x4 lift kits engineered for superior cornering and Bihar road comfort.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Starting From</span>
+                                <span class="font-display font-bold text-xl text-white">₹28,000+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('Suspension Upgrade')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Add to Estimate &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Service 5 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-steel text-silver">Xenon_it Partner</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                Projector Headlights &amp; Ambient Lighting
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                High-output Xenon_it Bi-LED projector retrofits, DRL sequential upgrades, and app-controlled 64-color fiber-optic cabin ambient lighting.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Starting From</span>
+                                <span class="font-display font-bold text-xl text-white">₹8,500+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('General Service')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Book Lighting &rarr;
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Service 6 -->
+                    <div class="bg-gunmetal border border-white/10 hover:border-crimson/50 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-xl bg-obsidian border border-white/10 group-hover:border-crimson/50 flex items-center justify-center text-crimson text-xl">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </div>
+                                <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-steel text-silver">Multi-Brand Care</span>
+                            </div>
+                            <h3 class="font-display font-bold text-xl sm:text-2xl text-white uppercase tracking-wide mb-2">
+                                Periodic Servicing, Denting/Painting &amp; AC Repair
+                            </h3>
+                            <p class="text-silver/80 text-sm leading-relaxed mb-6">
+                                Complete synthetic oil servicing, OBD-II diagnostics, factory-match paint booth restoration, brake overhauls, and car AC gas recharge.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] uppercase text-silver/60 block">Starting From</span>
+                                <span class="font-display font-bold text-xl text-white">₹3,499+</span>
+                            </div>
+                            <a href="#cost-estimator" onclick="preselectService('General Service')" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors">
+                                Add to Estimate &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. INTERACTIVE BUILD & SERVICE COST ESTIMATOR + LIVE DATABASE BOOKING -->
+        <section id="cost-estimator" class="py-20 sm:py-28 border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-14">
+                    <span class="text-crimson font-display font-semibold uppercase tracking-widest text-sm">Instant Quote &amp; Bay Reservation</span>
+                    <h2 class="font-display font-bold text-3xl sm:text-5xl text-white uppercase tracking-tight mt-2">
+                        BUILD &amp; SERVICE COST ESTIMATOR
+                    </h2>
+                    <p class="text-silver/80 text-sm sm:text-base mt-3">
+                        Select your vehicle segment and upgrades to see real-time pricing and turnaround time, then reserve your bay directly in our workshop queue.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Left Column: Car Segment & Multi-Select Services (7 cols) -->
+                    <div class="lg:col-span-7 bg-gunmetal border border-white/10 rounded-2xl p-6 sm:p-8 space-y-8">
+                        <!-- Step 1: Car Segment -->
+                        <div>
+                            <label class="block font-display uppercase tracking-wider text-white text-lg mb-4">
+                                <span class="text-crimson mr-2">01.</span> Select Car Segment
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="car-segment-selector">
+                                <button type="button" data-segment="Bikes" data-multiplier="1.0" class="segment-btn active p-4 rounded-xl border border-crimson bg-crimson/15 text-left transition-all">
+                                    <i class="fa-solid fa fa-motorcycle text-crimson text-xl mb-2 block"></i>
+                                    <div class="font-semibold text-white text-sm">Sportsbike / Caferacers</div>
+                                    <div class="text-[11px] text-silver/70">GT 650, Z900, Gureilla 450, CB 350RS</div>
+                                </button>
+                                <button type="button" data-segment="Hatchback / Sedan" data-multiplier="1.0" class="segment-btn active p-4 rounded-xl border border-crimson bg-crimson/15 text-left transition-all">
+                                    <i class="fa-solid fa-car-side text-crimson text-xl mb-2 block"></i>
+                                    <div class="font-semibold text-white text-sm">Hatchback / Sedan</div>
+                                    <div class="text-[11px] text-silver/70">Polo, Virtus, Slavia, City, Verna</div>
+                                </button>
+                                <button type="button" data-segment="Compact SUV" data-multiplier="1.2" class="segment-btn p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 text-left transition-all">
+                                    <i class="fa-solid fa-car text-silver text-xl mb-2 block"></i>
+                                    <div class="font-semibold text-white text-sm">Compact SUV</div>
+                                    <div class="text-[11px] text-silver/70">Nexon, Creta, Seltos, Taigun</div>
+                                </button>
+                                <button type="button" data-segment="Full-Size SUV / Luxury" data-multiplier="1.45" class="segment-btn p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 text-left transition-all">
+                                    <i class="fa-solid fa-truck-monster text-silver text-xl mb-2 block"></i>
+                                    <div class="font-semibold text-white text-sm">Full-Size SUV / Luxury</div>
+                                    <div class="text-[11px] text-silver/70">Thar, Fortuner, Scorpio-N, BMW/Audi</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Select Multiple Services -->
+                        <div>
+                            <label class="block font-display uppercase tracking-wider text-white text-lg mb-4">
+                                <span class="text-crimson mr-2">02.</span> Choose Upgrades &amp; Services
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="estimator-services-list">
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-crimson bg-crimson/10 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="ECU Stage 1 Tune" data-base="18000" data-days="1" checked class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">ECU Stage 1 Tune</div>
+                                            <div class="text-xs text-silver/70">+25% HP/Torque &amp; BMC Filter</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold text-crimson">₹18k+</span>
+                                </label>
+
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="Ceramic Coating" data-base="12000" data-days="2" class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">9H Ceramic Coating</div>
+                                            <div class="text-xs text-silver/70">Multi-stage Paint Correction</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-silver/80">₹12k+</span>
+                                </label>
+
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="Full PPF" data-base="45000" data-days="3" class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">Full Body TPU PPF</div>
+                                            <div class="text-xs text-silver/70">Self-Healing Gloss / Matte</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-silver/80">₹45k+</span>
+                                </label>
+
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="Custom Exhaust" data-base="24000" data-days="1" class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">Custom Exhaust</div>
+                                            <div class="text-xs text-silver/70">Mark Performance / Valvetronic</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-silver/80">₹24k+</span>
+                                </label>
+
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="Suspension Upgrade" data-base="28000" data-days="1" class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">Suspension Upgrade</div>
+                                            <div class="text-xs text-silver/70">Dr.Nano Coil-overs / Lift Kit</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-silver/80">₹28k+</span>
+                                </label>
+
+                                <label class="est-service-card cursor-pointer flex items-center justify-between p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" value="General Service" data-base="3500" data-days="1" class="est-checkbox w-4 h-4 accent-crimson rounded">
+                                        <div>
+                                            <div class="font-semibold text-white text-sm">General Service &amp; Care</div>
+                                            <div class="text-xs text-silver/70">Periodic Service / Lighting / AC</div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-silver/80">₹3.5k+</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Live Estimate Summary Bar -->
+                        <div class="bg-obsidian border border-crimson/40 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <span class="text-xs uppercase tracking-wider text-silver/70 block">Estimated Build Cost Range</span>
+                                <div id="est-price-display" class="font-display font-bold text-2xl sm:text-3xl text-white mt-0.5">
+                                    ₹18,000 – ₹21,500
+                                </div>
+                            </div>
+                            <div class="sm:text-right">
+                                <span class="text-xs uppercase tracking-wider text-silver/70 block">Est. Workshop Turnaround</span>
+                                <div id="est-turnaround-display" class="font-display font-bold text-lg sm:text-xl text-crimson mt-0.5">
+                                    1 Working Day
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Save Quote & Book Slot Form (5 cols) -->
+                    <div class="lg:col-span-5 bg-gradient-to-b from-gunmetal to-obsidian border border-white/15 rounded-2xl p-6 sm:p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="font-display font-bold text-2xl text-white uppercase">Save Quote &amp; Book Slot</h3>
+                                <p class="text-xs text-silver/70 mt-0.5">Saves directly to BR01 Customs live bay schedule</p>
+                            </div>
+                            <span id="db-connection-badge" class="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-medium">
+                                &bull; Live Sync
+                            </span>
+                        </div>
+
+                        <form id="booking-form" class="space-y-4">
+                            <div>
+                                <label for="cust-name" class="block text-xs font-medium text-silver mb-1.5">Your Full Name *</label>
+                                <input type="text" id="cust-name" required placeholder="e.g., Rahul Verma"
+                                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-white placeholder-silver/40 text-sm focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label for="cust-phone" class="block text-xs font-medium text-silver mb-1.5">Phone / WhatsApp Number *</label>
+                                <input type="tel" id="cust-phone" required placeholder="e.g., +91 98350 XXXXX"
+                                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-white placeholder-silver/40 text-sm focus:outline-none">
+                            </div> 
+
+                            <div>
+                                <label for="cust-email" class="block text-xs font-medium text-silver mb-1.5">Email Address *</label>
+                                <input type="email" id="cust-email" optional placeholder="e.g., jackryan@xxxxxxx"
+                                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-white placeholder-silver/40 text-sm focus:outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="cust-car" class="block text-xs font-medium text-silver mb-1.5">Car Model &amp; Year *</label>
+                                    <input type="text" id="cust-car" required placeholder="e.g., Skoda Slavia 1.5"
+                                           class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-white placeholder-silver/40 text-sm focus:outline-none">
+                                </div>
+                                <div class="relative">
+                                    <label for="cust-date" class="block text-xs font-medium text-silver mb-1.5">Preferred Date *</label>
+                                    <div class="relative">
+                                        <input type="text" id="cust-date" readonly required placeholder="Select a date"
+                                               class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl pl-4 pr-10 py-3 text-white text-sm cursor-pointer focus:outline-none">
+                                        <button type="button" id="open-calendar-btn" aria-label="Open calendar"
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-crimson hover:text-white p-1">
+                                            <i class="fa-regular fa-calendar-days text-base"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Custom Month-View Calendar Popup -->
+                                    <div id="custom-calendar-popup" class="hidden absolute right-0 sm:left-0 mt-2 z-40 w-72 bg-gunmetal border border-white/15 rounded-2xl p-4 shadow-2xl">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <button type="button" id="cal-prev-month" aria-label="Previous month" class="w-8 h-8 rounded-lg bg-obsidian hover:bg-steel text-silver hover:text-white flex items-center justify-center transition-colors">
+                                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                                            </button>
+                                            <div id="cal-month-year" class="font-display font-bold text-sm uppercase tracking-wider text-white"></div>
+                                            <button type="button" id="cal-next-month" aria-label="Next month" class="w-8 h-8 rounded-lg bg-obsidian hover:bg-steel text-silver hover:text-white flex items-center justify-center transition-colors">
+                                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-silver/60 mb-1.5">
+                                            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                        </div>
+                                        <div id="cal-days-grid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="submit-booking-btn"
+                                    class="w-full bg-crimson hover:bg-crimsonDark text-white font-display font-semibold uppercase tracking-wider text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-2.5 transition-all crimson-glow mt-2">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <span>Save Quote &amp; Book Slot</span>
+                            </button>
+                        </form>
+
+                        <!-- Post-Submission Confirmation & 1-Click WhatsApp Forward -->
+                        <div id="booking-success-box" class="hidden mt-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-3">
+                            <div class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-circle-check text-emerald-400 text-lg mt-0.5"></i>
+                                <div>
+                                    <div class="font-semibold text-white text-sm">Slot Reserved in Workshop Queue!</div>
+                                    <p class="text-xs text-silver/80 mt-0.5">Your quote has been logged in our system. You can also forward it immediately to our Patna desk on WhatsApp:</p>
+                                </div>
+                            </div>
+                            <a id="post-booking-wa-btn" href="#" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold text-xs sm:text-sm py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>Send via WhatsApp (+91 9124970282)</span>
+                            </a>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-white/10 text-center">
+                            <a id="direct-wa-quote-btn" href="#" target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center justify-center gap-2 text-xs font-semibold text-silver hover:text-white transition-colors">
+                                <i class="fa-brands fa-whatsapp text-[#25D366] text-base"></i>
+                                <span>Or Send Estimate Directly via WhatsApp (+91 91249 70282)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DYNAMIC "RECENT BUILDS" GALLERY -->
+        <section id="recent-builds" class="py-20 sm:py-28 bg-gunmetal/40 border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                    <div>
+                        <span class="text-crimson font-display font-semibold uppercase tracking-widest text-sm">Live Workshop Portfolio</span>
+                        <h2 class="font-display font-bold text-3xl sm:text-5xl text-white uppercase tracking-tight mt-2">
+                            RECENT PATNA BUILDS
+                        </h2>
+                    </div>
+
+                    <!-- Category Filter Pills -->
+                    <div id="gallery-filter-bar" class="flex flex-wrap gap-2">
+                        <button data-filter="All" class="build-filter-btn active bg-crimson text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-lg transition-all">
+                            All
+                        </button>
+                        <button data-filter="Performance & Exhaust" class="build-filter-btn bg-gunmetal hover:bg-steel text-silver border border-white/10 text-xs sm:text-sm font-medium px-4 py-2 rounded-lg transition-all">
+                            Performance &amp; Exhaust
+                        </button>
+                        <button data-filter="Wraps & PPF" class="build-filter-btn bg-gunmetal hover:bg-steel text-silver border border-white/10 text-xs sm:text-sm font-medium px-4 py-2 rounded-lg transition-all">
+                            Wraps &amp; PPF
+                        </button>
+                        <button data-filter="Lighting & Suspension" class="build-filter-btn bg-gunmetal hover:bg-steel text-silver border border-white/10 text-xs sm:text-sm font-medium px-4 py-2 rounded-lg transition-all">
+                            Lighting &amp; Suspension
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Builds Grid -->
+                <div id="public-builds-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Rendered dynamically from Firestore / Seed State -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. WORKSHOP INFO, REVIEWS & PATNA LOCATION SECTION -->
+        <section id="location" class="py-20 sm:py-28">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Verified Review Strip -->
+                <div class="bg-gunmetal border border-white/10 rounded-2xl p-6 sm:p-8 mb-12">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                        <div>
+                            <span class="text-crimson font-display font-semibold uppercase tracking-widest text-xs">Enthusiast Verified</span>
+                            <h3 class="font-display font-bold text-2xl sm:text-3xl text-white uppercase mt-1">
+                                4.8★ Rated Across 90+ Patna Car Owners
+                            </h3>
+                        </div>
+                        <div class="flex items-center gap-2 text-yellow-400 text-lg">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            <span class="text-white font-bold text-sm ml-1">4.8 / 5.0</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 text-sm">
+                        <div class="bg-obsidian/70 p-4 rounded-xl border border-white/5">
+                            <p class="text-silver/90 italic">"Got Mark Performance exhaust and Stage 1 ECU tune on my Slavia. Best tuning expertise in Bihar without needing to send the car to Delhi."</p>
+                            <div class="text-xs font-semibold text-white mt-3">— Aman Raj &bull; Boring Road, Patna</div>
+                        </div>
+                        <div class="bg-obsidian/70 p-4 rounded-xl border border-white/5">
+                            <p class="text-silver/90 italic">"Installed Dr.Nano coil-overs and Xenon_it projectors on my Thar. Clean wiring, zero rattle, and super helpful team."</p>
+                            <div class="text-xs font-semibold text-white mt-3">— Saurav Sinha &bull; Sri Krishna Puri, Patna</div>
+                        </div>
+                        <div class="bg-obsidian/70 p-4 rounded-xl border border-white/5">
+                            <p class="text-silver/90 italic">"Full gloss TPU PPF done on our Fortuner Legender. Seamless edge wrapping and delivered right on time before 9 PM."</p>
+                            <div class="text-xs font-semibold text-white mt-3">— Dr. Nishant Verma &bull; Kankarbagh, Patna</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address & Google Map -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div class="lg:col-span-5 bg-gunmetal border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+                        <div>
+                            <span class="text-crimson font-display font-semibold uppercase tracking-widest text-sm">Visit Our Bay</span>
+                            <h2 class="font-display font-bold text-3xl sm:text-4xl text-white uppercase tracking-tight mt-2 mb-6">
+                                PATNA WORKSHOP HQ
+                            </h2>
+
+                            <div class="space-y-5 text-sm">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-crimson/15 text-crimson flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Exact Address</div>
+                                        <p class="text-silver/80 mt-0.5 leading-relaxed">
+                                            8/A, Beside Sai Kripa Apartment,<br>
+                                            Near Triangle Park Back Gate,<br>
+                                            Sri Krishna Puri, Boring Road,<br>
+                                            Patna - 800001, Bihar
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-crimson/15 text-crimson flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Workshop Hours</div>
+                                        <p class="text-silver/80 mt-0.5">
+                                            Open Daily: 10:00 AM – 9:00 PM<br>
+                                            <span class="text-emerald-400 text-xs font-medium">&bull; Open 7 Days a Week</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-crimson/15 text-crimson flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Direct Workshop Desk</div>
+                                        <p class="text-silver/80 mt-0.5">
+                                            <a href="tel:+919724875032" class="text-white font-semibold hover:text-crimson">+91 97248 75032</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mt-8 pt-6 border-t border-white/10">
+                            <a href="https://maps.google.com/?q=Sri+Krishna+Puri+Boring+Road+Patna+800001" target="_blank" rel="noopener noreferrer"
+                               class="bg-steel hover:bg-white/15 text-white font-medium text-xs sm:text-sm py-3 px-4 rounded-xl text-center transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-diamond-turn-right text-crimson"></i>
+                                <span>Open Maps</span>
+                            </a>
+                            <a href="https://wa.me/919724875032?text=Hi%20BR01%20Customs%20Patna!%20I%20need%20directions%20to%20your%20Sri%20Krishna%20Puri%20workshop." target="_blank" rel="noopener noreferrer"
+                               class="bg-crimson hover:bg-crimsonDark text-white font-medium text-xs sm:text-sm py-3 px-4 rounded-xl text-center transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>WhatsApp Desk</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Embedded Google Map Centered on Sri Krishna Puri, Boring Road, Patna -->
+                    <div class="lg:col-span-7 bg-gunmetal border border-white/10 rounded-2xl overflow-hidden min-h-[360px]">
+                        <iframe 
+                            title="BR01 Customs - Sri Krishna Puri, Boring Road, Patna"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7195.346164795765!2d85.1095!3d25.6158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed58246672c64b%3A0x88981b1f7109986b!2sSri%20Krishna%20Puri%2C%20Patna%2C%20Bihar%20800001!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin" 
+                            class="w-full h-full min-h-[360px] border-0 filter invert-[90%] hue-rotate-180 contrast-[95%]" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-obsidian border-t border-white/10 py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="bg-crimson text-white font-display font-bold px-2 py-0.5 rounded text-sm">BR01</span>
+                    <span class="font-display font-bold text-white tracking-wider uppercase">BR01 CUSTOMS &bull; #DriveBeyondOrdinary</span>
+                </div>
+                <p class="text-xs text-silver/60 text-center">
+                    8/A, Sri Krishna Puri, Boring Road, Patna - 800001 &bull; +91 97248 75032
+                </p>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs text-silver/50">Patna's Performance &amp; Tuning Hub</span>
+                </div>
+            </div>
+        </footer>
+
+        <!-- FLOATING WHATSAPP BUTTON -->
+        <a href="https://wa.me/919724875032?text=Hi%20BR01%20Customs%20Patna!%20I%20visited%20your%20website%20and%20want%20to%20book%20a%20service%20or%20build%20consultation."
+           target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"
+           class="fixed bottom-5 right-5 z-40 bg-[#25D366] hover:bg-[#1ebe5d] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl transition-transform hover:scale-110">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- 8. FULL-STACK ADMIN DASHBOARD VIEW      -->
+    <!-- ===================================================================== -->
+    <div id="admin-dashboard-view" class="hidden min-h-screen bg-obsidian text-silver">
+        <!-- Admin Top Header -->
+        <header class="bg-gunmetal border-b border-white/10 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="bg-crimson text-white font-display font-bold px-2.5 py-1 rounded text-sm">BR01 ADMIN</span>
+                    <span class="font-display font-bold text-white uppercase tracking-wide text-sm sm:text-lg">
+                        Workshop &amp; Agency Control Panel
+                    </span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="admin-storage-mode" class="hidden sm:inline-block text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        Cloud DB Connected
+                    </span>
+                    <button onclick="exitAdminDashboard()" class="bg-steel hover:bg-crimson text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Live Website</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            <!-- MONTHLY AGENCY ANALYTICS SUMMARY -->
+            <section>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-display font-bold text-xl text-white uppercase tracking-wide">Monthly Agency ROI &amp; Workshop Metrics</h2>
+                    <span class="text-xs text-silver/60">Share this summary monthly with BR01 Customs owner</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-gunmetal border border-white/10 rounded-xl p-5">
+                        <div class="text-xs uppercase tracking-wider text-silver/70">Total Slot Bookings</div>
+                        <div id="stat-total-bookings" class="font-display font-bold text-3xl text-white mt-1">0</div>
+                        <div class="text-xs text-emerald-400 mt-1"><i class="fa-solid fa-arrow-trend-up"></i> Active Lead Pipeline</div>
+                    </div>
+                    <div class="bg-gunmetal border border-white/10 rounded-xl p-5">
+                        <div class="text-xs uppercase tracking-wider text-silver/70">Est. Pipeline Revenue</div>
+                        <div id="stat-pipeline-value" class="font-display font-bold text-3xl text-crimson mt-1">₹0</div>
+                        <div class="text-xs text-silver/60 mt-1">From website estimator quotes</div>
+                    </div>
+                    <div class="bg-gunmetal border border-white/10 rounded-xl p-5">
+                        <div class="text-xs uppercase tracking-wider text-silver/70">Pending / In-Bay Cars</div>
+                        <div id="stat-active-jobs" class="font-display font-bold text-3xl text-white mt-1">0</div>
+                        <div class="text-xs text-amber-400 mt-1">Requires workshop follow-up</div>
+                    </div>
+                    <div class="bg-gunmetal border border-white/10 rounded-xl p-5">
+                        <div class="text-xs uppercase tracking-wider text-silver/70">Live Portfolio Builds</div>
+                        <div id="stat-portfolio-count" class="font-display font-bold text-3xl text-white mt-1">6</div>
+                        <div class="text-xs text-silver/60 mt-1">Published in Recent Builds</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LIVE SITE SETTINGS (Promo Banner Control) -->
+            <section class="bg-gunmetal border border-white/10 rounded-2xl p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <div>
+                        <h3 class="font-display font-bold text-xl text-white uppercase">Live Site Promo Banner Control</h3>
+                        <p class="text-xs text-silver/70">Update the top seasonal offer bar on the public site instantly without editing code.</p>
+                    </div>
+                    <label class="inline-flex items-center gap-2.5 cursor-pointer bg-obsidian px-4 py-2 rounded-xl border border-white/10">
+                        <input type="checkbox" id="admin-banner-toggle" checked class="w-4 h-4 accent-crimson">
+                        <span class="text-xs font-semibold text-white">Banner Visible ON/OFF</span>
+                    </label>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="admin-banner-input" 
+                           value="🔥 MONSOON & FESTIVE OFFER: 15% OFF Full Body PPF & Ceramic Coating — Book Your Slot Today"
+                           class="flex-1 bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                    <button onclick="saveSiteSettings()" class="bg-crimson hover:bg-crimsonDark text-white font-display font-semibold uppercase tracking-wider px-6 py-3 rounded-xl transition-colors">
+                        Save Banner Live
+                    </button>
+                </div>
+            </section>
+
+            <!-- LIVE BOOKINGS MANAGER -->
+            <section class="bg-gunmetal border border-white/10 rounded-2xl p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+                    <div>
+                        <h3 class="font-display font-bold text-xl text-white uppercase">Live Customer Bookings Manager</h3>
+                        <p class="text-xs text-silver/70">Manage incoming slot requests, update bay status, or message customers on WhatsApp.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10 text-xs uppercase text-silver/70">
+                                <th class="py-3 px-3">Customer</th>
+                                <th class="py-3 px-3">Car &amp; Segment</th>
+                                <th class="py-3 px-3">Requested Services</th>
+                                <th class="py-3 px-3">Est. Value &amp; Date</th>
+                                <th class="py-3 px-3">Bay Status</th>
+                                <th class="py-3 px-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-bookings-tbody" class="divide-y divide-white/10">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Routing & Banner Settings -->
+            <div class="bg-gunmetal border border-zinc-800 rounded-xl p-5">
+          <h4 class="font-display font-bold text-lg uppercase text-white mb-4">1. Lead Routing & Site Settings</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label class="block text-xs text-zinc-400 uppercase mb-1">Company WhatsApp Number (with 91)</label>
+              <input type="text" id="cfg-whatsapp" placeholder="919124970282" class="w-full bg-obsidian border border-zinc-700 rounded px-3 py-2 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 uppercase mb-1">Company Quote Receiver Email</label>
+              <input type="email" id="cfg-email" placeholder="br01customs@gmail.com" class="w-full bg-obsidian border border-zinc-700 rounded px-3 py-2 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 uppercase mb-1">Change Admin Portal PIN</label>
+              <input type="text" id="cfg-admin-pin" maxlength="8" placeholder="New 4-8 digit PIN" class="w-full bg-obsidian border border-zinc-700 rounded px-3 py-2 text-sm font-mono text-white" />
+            </div>
+          </div>
+          <button onclick="saveSiteSettings()" class="bg-crimson hover:bg-rose-700 text-white text-xs font-semibold px-4 py-2 rounded">
+            Save Routing & Admin PIN Settings
+          </button>
+        </div>
+
+            <!-- PORTFOLIO / BUILDS MANAGER -->
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Add New Build Form (5 cols) -->
+                <div class="lg:col-span-5 bg-gunmetal border border-white/10 rounded-2xl p-6 h-fit">
+                    <h3 class="font-display font-bold text-xl text-white uppercase mb-1">Publish New Car Build</h3>
+                    <p class="text-xs text-silver/70 mb-5">New builds immediately appear in the public "Recent Builds" gallery.</p>
+
+                    <form id="add-build-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-silver mb-1">Car Name &amp; Build Title *</label>
+                            <input type="text" id="new-build-title" required placeholder="e.g., Mahindra Thar Roxx — Stage 1 + Lift"
+                                   class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-silver mb-1">Gallery Category *</label>
+                            <select id="new-build-category" class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none">
+                                <option value="Performance & Exhaust">Performance &amp; Exhaust</option>
+                                <option value="Wraps & PPF">Wraps &amp; PPF</option>
+                                <option value="Lighting & Suspension">Lighting &amp; Suspension</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-silver mb-1">Modifications Installed *</label>
+                            <input type="text" id="new-build-mods" required placeholder="e.g., Mark Performance Exhaust, BMC Filter, Stage 1 Tune"
+                                   class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-silver mb-1">Photo URL (or pick a preset below)</label>
+                            <input type="url" id="new-build-image" placeholder="https://..."
+                                   class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none mb-2">
+                            <div class="flex flex-wrap gap-1.5 text-[11px]">
+                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Black SUV</button>
+                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Sport Sedan</button>
+                                <button type="button" onclick="setPresetCarImg('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80')" class="bg-obsidian hover:bg-steel border border-white/10 px-2.5 py-1 rounded text-silver">Preset: Luxury Coupe</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-crimson hover:bg-crimsonDark text-white font-display font-semibold uppercase tracking-wider py-3 rounded-xl transition-colors">
+                            + Publish to Live Gallery
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Existing Builds List (7 cols) -->
+                <div class="lg:col-span-7 bg-gunmetal border border-white/10 rounded-2xl p-6">
+                    <h3 class="font-display font-bold text-xl text-white uppercase mb-1">Manage Published Builds</h3>
+                    <p class="text-xs text-silver/70 mb-5">Remove outdated projects anytime.</p>
+                    <div id="admin-builds-list" class="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- ADMIN PIN LOGIN MODAL (Demo PIN: 0101)                                -->
+    <!-- ===================================================================== -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+        <div class="bg-gunmetal border border-white/15 rounded-2xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeAdminModal()" aria-label="Close modal" class="absolute top-4 right-4 text-silver hover:text-white p-1.5">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="w-12 h-12 rounded-xl bg-crimson/15 border border-crimson/40 flex items-center justify-center text-crimson text-xl mb-4">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <h3 class="font-display font-bold text-2xl text-white uppercase">BR01 Customs Admin Portal</h3>
+            <p class="text-xs text-silver/80 mt-1 mb-4">Enter workshop management PIN to access live bookings, portfolio manager &amp; site settings.</p>
+
+            <form id="admin-pin-form" class="space-y-4">
+                <input type="password" id="admin-pin-input" maxlength="8" placeholder="Enter Admin PIN"
+                       class="w-full bg-obsidian border border-white/15 focus:border-crimson rounded-xl px-4 py-3 text-center font-mono text-xl tracking-[0.4em] text-white focus:outline-none">
+                <div id="admin-pin-error" class="hidden text-xs text-crimson text-center font-medium">Incorrect PIN. Please try again.</div>
+                <button type="submit" class="w-full bg-crimson hover:bg-crimsonDark text-white font-display font-semibold uppercase tracking-wider py-3.5 rounded-xl transition-colors crimson-glow">
+                    Unlock Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-banner" class="fixed bottom-24 right-5 z-50 hidden bg-gunmetal border border-crimson text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl items-center gap-2.5">
+        <i class="fa-solid fa-circle-check text-crimson"></i>
+        <span id="toast-message">Updated!</span>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- FULL-STACK JAVASCRIPT + FIREBASE FIRESTORE REAL-TIME BACKEND          -->
+    <!-- ===================================================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Workshop Constants
+        const DEFAULT_WORKSHOP_PHONE = "919124970282";
+        const WEB3FORMS_ACCESS_KEY = "73f17188-1be0-4d50-afc9-bdd7310a0de3";
+        const DEFAULT_ADMIN_PIN = "0101";
+
+        // Default Seed Builds (6 Authentic Indian Car Builds for Patna)
+        const SEED_BUILDS = [
+            {
+                id: "seed-1",
+                title: "Mahindra Thar 4x4 — Stage 1 + 2-Inch Lift",
+                category: "Performance & Exhaust",
+                mods: "Stage 1 Diesel ECU Remap, BMC Air Filter, Dr.Nano 2-Inch Lift Kit & All-Terrain Setup",
+                image: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000006
+            },
+            {
+                id: "seed-2",
+                title: "Hyundai Verna Turbo — Valvetronic Exhaust + Matte Wrap",
+                category: "Wraps & PPF",
+                mods: "Mark Performance Valvetronic Exhaust, Avery Satin Stealth Black Wrap & De-Chrome",
+                image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000005
+            },
+            {
+                id: "seed-3",
+                title: "Skoda Slavia 1.5 TSI — ECU Tune + Dr.Nano Coilovers",
+                category: "Performance & Exhaust",
+                mods: "Stage 1+ ECU & DSG Calibration, Dr.Nano Adjustable Coil-overs & Stainless Downpipe",
+                image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000004
+            },
+            {
+                id: "seed-4",
+                title: "Toyota Fortuner Legender — Full Gloss TPU PPF",
+                category: "Wraps & PPF",
+                mods: "200-Micron Self-Healing Gloss TPU PPF, 9H Ceramic Topcoat & Underbody Anti-Rust",
+                image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000003
+            },
+            {
+                id: "seed-5",
+                title: "Honda City ZX — Xenon_it Bi-LED Projector Retrofit",
+                category: "Lighting & Suspension",
+                mods: "Xenon_it Tri-Color Bi-LED Projectors, Sequential DRLs & 64-Color Ambient Cabin Lighting",
+                image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000002
+            },
+            {
+                id: "seed-6",
+                title: "Tata Nexon Fearless — 9H Graphene Ceramic Coating",
+                category: "Wraps & PPF",
+                mods: "3-Stage Paint Correction, 10H Graphene Ceramic Shield & Interior Leather Protection",
+                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
+                createdAt: 1710000001
+            }
+        ];
+
+        // Application Reactive State
+        let state = {
+            builds: [...SEED_BUILDS],
+            bookings: [],
+            settings: {
+                bannerText: "🔥 MONSOON & FESTIVE OFFER: 15% OFF Full Body PPF & Ceramic Coating — Book Your Slot Today",
+                bannerVisible: true,
+                whatsappNumber: DEFAULT_WORKSHOP_PHONE,
+                receiverEmail: "",
+                adminPin: DEFAULT_ADMIN_PIN
+            },
+            activeBuildFilter: "All",
+            selectedSegment: "Hatchback / Sedan",
+            segmentMultiplier: 1.0,
+            useCloud: false,
+            db: null,
+            user: null,
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'br01-customs-patna'
+        };
+
+        function getActiveWhatsApp() {
+            const raw = (state.settings?.whatsappNumber || DEFAULT_WORKSHOP_PHONE).replace(/[^0-9]/g, '');
+            if (!raw) return DEFAULT_WORKSHOP_PHONE;
+            return raw.length === 10 ? `91${raw}` : raw;
+        }
+
+        function getActiveAdminPin() {
+            return (state.settings?.adminPin || DEFAULT_ADMIN_PIN).trim();
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast-banner');
+            if (!toast) return;
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        function activateFallbackMode() {
+            state.useCloud = false;
+            const badge = document.getElementById('db-connection-badge');
+            const adminBadge = document.getElementById('admin-storage-mode');
+            if (badge) badge.textContent = "• Instant Sync";
+            if (adminBadge) adminBadge.textContent = "Instant Session DB";
+            renderAll();
+        }
+
+        // Initialize Firebase Firestore (with seamless in-memory fallback if offline/unconfigured)
+        async function initBackend() {
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDJuZC28-O9aCj8y5QFfPqu0jCeD_wlIs8",
+                    authDomain: "br01-customs.firebaseapp.com",
+                    projectId: "br01-customs",
+                    storageBucket: "br01-customs.firebasestorage.app",
+                    messagingSenderId: "272858778014",
+                    appId: "1:272858778014:web:b96fe32da458610941ee8f"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                state.db = db;
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) return;
+                    state.user = user;
+                    state.useCloud = true;
+                    attachRealtimeListeners();
+                });
+            } catch (err) {
+                console.warn("Running in instant local-sync mode:", err);
+                activateFallbackMode();
+            }
+        }
+
+        // Apply Promo Banner & Routing Settings
+        function applySiteSettings() {
+            const banner = document.getElementById('promo-banner');
+            const bannerText = document.getElementById('promo-banner-text');
+            const adminInput = document.getElementById('admin-banner-input');
+            const adminToggle = document.getElementById('admin-banner-toggle');
+            const waInput = document.getElementById('cfg-whatsapp');
+            const emailInput = document.getElementById('cfg-email');
+            const pinInput = document.getElementById('cfg-admin-pin');
+
+            if (bannerText) bannerText.textContent = state.settings.bannerText;
+            if (adminInput) adminInput.value = state.settings.bannerText;
+            if (adminToggle) adminToggle.checked = state.settings.bannerVisible;
+            if (waInput && document.activeElement !== waInput) waInput.value = getActiveWhatsApp();
+            if (emailInput && document.activeElement !== emailInput) emailInput.value = state.settings.receiverEmail || "";
+            if (pinInput && document.activeElement !== pinInput) pinInput.value = getActiveAdminPin();
+
+            if (banner) {
+                if (state.settings.bannerVisible) {
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
+            }
+            recalculateEstimator();
+            renderBuildsGallery();
+        }
+
+        // Attach Firestore Real-Time Listeners (Strictly following RULE 1 & RULE 2)
+        function attachRealtimeListeners() {
+            if (!state.db || !state.user) return;
+            const appId = state.appId;
+
+            // 1. Public Builds Collection
+            const buildsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'builds');
+            onSnapshot(buildsCol, (snapshot) => {
+                if (snapshot.empty) {
+                    // Seed initial builds to Firestore once
+                    SEED_BUILDS.forEach(async (b) => {
+                        await setDoc(doc(state.db, 'artifacts', appId, 'public', 'data', 'builds', b.id), b);
+                    });
+                } else {
+                    const items = [];
+                    snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    state.builds = items;
+                    renderBuildsGallery();
+                    renderAdminDashboard();
+                }
+            }, (error) => console.error("Builds snapshot error:", error));
+
+            // 2. Public Bookings Collection
+            const bookingsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'bookings');
+            onSnapshot(bookingsCol, (snapshot) => {
+                const items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                state.bookings = items;
+                renderAdminDashboard();
+            }, (error) => console.error("Bookings snapshot error:", error));
+
+            // 3. Public Site Settings Document
+            const settingsDoc = doc(state.db, 'artifacts', appId, 'public', 'data', 'settings', 'global');
+            onSnapshot(settingsDoc, (docSnap) => {
+                if (docSnap.exists()) {
+                    state.settings = { ...state.settings, ...docSnap.data() };
+                    applySiteSettings();
+                }
+            }, (error) => console.error("Settings snapshot error:", error));
+        }
+
+        // Render Public Recent Builds Gallery
+        function renderBuildsGallery() {
+            const grid = document.getElementById('public-builds-grid');
+            if (!grid) return;
+
+            const filtered = state.activeBuildFilter === "All"
+                ? state.builds
+                : state.builds.filter(b => b.category === state.activeBuildFilter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-silver/60">No builds found in this category yet.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(build => {
+                const waText = encodeURIComponent(`Hi BR01 Customs Patna! I saw the "${build.title}" build on your website and want a quote for similar mods.`);
+                return `
+                    <div class="bg-obsidian border border-white/10 hover:border-crimson/50 rounded-2xl overflow-hidden flex flex-col justify-between transition-all group">
+                        <div>
+                            <div class="relative h-56 overflow-hidden">
+                                <img src="${build.image}" 
+                                     onerror="this.src='https://placehold.co/800x600/14181F/FF3B1D?text=BR01+CUSTOMS+BUILD'"
+                                     alt="${build.title}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                                <span class="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-crimson text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-crimson/30">
+                                    ${build.category}
+                                </span>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="font-display font-bold text-xl text-white uppercase tracking-wide group-hover:text-crimson transition-colors">
+                                    ${build.title}
+                                </h3>
+                                <p class="text-silver/80 text-xs sm:text-sm mt-2 leading-relaxed">
+                                    <strong class="text-white">Mods:</strong> ${build.mods}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-2">
+                            <a href="https://wa.me/${getActiveWhatsApp()}?text=${waText}" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-gunmetal hover:bg-crimson text-white text-xs font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 border border-white/10 transition-colors">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Enquire Similar Build</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update Cost Estimator Calculations
+        function recalculateEstimator() {
+            const checkedBoxes = document.querySelectorAll('.est-checkbox:checked');
+            let baseSum = 0;
+            let totalDays = 0;
+            const selectedNames = [];
+
+            checkedBoxes.forEach(cb => {
+                baseSum += parseInt(cb.dataset.base, 10);
+                totalDays += parseInt(cb.dataset.days, 10);
+                selectedNames.push(cb.value);
+            });
+
+            // Highlight selected cards
+            document.querySelectorAll('.est-service-card').forEach(card => {
+                const cb = card.querySelector('.est-checkbox');
+                if (cb.checked) {
+                    card.classList.add('border-crimson', 'bg-crimson/10');
+                    card.classList.remove('border-white/10', 'bg-obsidian');
+                } else {
+                    card.classList.remove('border-crimson', 'bg-crimson/10');
+                    card.classList.add('border-white/10', 'bg-obsidian');
+                }
+            });
+
+            const minPrice = Math.round((baseSum * state.segmentMultiplier) / 500) * 500;
+            const maxPrice = Math.round((minPrice * 1.18) / 500) * 500;
+            const turnaround = totalDays === 0 ? "Same Day Checkup" : totalDays === 1 ? "1 Working Day" : `${Math.min(totalDays, 6)} Working Days`;
+
+            const priceEl = document.getElementById('est-price-display');
+            const timeEl = document.getElementById('est-turnaround-display');
+
+            if (selectedNames.length === 0) {
+                priceEl.textContent = "Select at least 1 service";
+            } else {
+                priceEl.textContent = `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`;
+            }
+            timeEl.textContent = turnaround;
+
+            // Update Direct WhatsApp Link
+            const carInput = document.getElementById('cust-car')?.value.trim() || state.selectedSegment;
+            const waMsg = `Hi BR01 Customs Patna! 🏁\nI generated an estimate on your website:\n\n• Car: ${carInput} (${state.selectedSegment})\n• Services: ${selectedNames.join(', ') || 'General Consultation'}\n• Est. Range: ₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}\n\nPlease share available slot timings at Sri Krishna Puri.`;
+            const directWaBtn = document.getElementById('direct-wa-quote-btn');
+            if (directWaBtn) {
+                directWaBtn.href = `https://wa.me/${getActiveWhatsApp()}?text=${encodeURIComponent(waMsg)}`;
+            }
+
+            return { minPrice, maxPrice, selectedNames, turnaround };
+        }
+
+        // Preselect service from Services Grid button
+        window.preselectService = function(serviceName) {
+            document.querySelectorAll('.est-checkbox').forEach(cb => {
+                if (cb.value === serviceName) cb.checked = true;
+            });
+            recalculateEstimator();
+        };
+
+        // Render Admin Dashboard Tables & Stats
+        function renderAdminDashboard() {
+            // Update Analytics Cards
+            const totalBookings = state.bookings.length;
+            const pipelineSum = state.bookings.reduce((acc, b) => acc + (Number(b.estimatedMin) || 0), 0);
+            const activeJobs = state.bookings.filter(b => b.status !== 'Completed').length;
+
+            document.getElementById('stat-total-bookings').textContent = totalBookings;
+            document.getElementById('stat-pipeline-value').textContent = `₹${pipelineSum.toLocaleString('en-IN')}`;
+            document.getElementById('stat-active-jobs').textContent = activeJobs;
+            document.getElementById('stat-portfolio-count').textContent = state.builds.length;
+
+            // Render Bookings Table
+            const tbody = document.getElementById('admin-bookings-tbody');
+            if (tbody) {
+                if (state.bookings.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-silver/60">No customer bookings yet. Submit one from the estimator to test!</td></tr>`;
+                } else {
+                    tbody.innerHTML = state.bookings.map(b => {
+                        const cleanPhone = (b.phone || '').replace(/[^0-9]/g, '');
+                        const waCustomerMsg = encodeURIComponent(`Hi ${b.name}, this is BR01 Customs Patna! Your slot for ${b.carModel} (${(b.services || []).join(', ')}) on ${b.preferredDate} is currently marked: *${b.status}*. See you at Sri Krishna Puri!`);
+                        return `
+                            <tr class="hover:bg-obsidian/50">
+                                <td class="py-3.5 px-3">
+                                    <div class="font-semibold text-white">${b.name}</div>
+                                    <div class="text-xs text-silver/70">${b.phone}</div>
+                                </td>
+                                <td class="py-3.5 px-3">
+                                    <div class="font-medium text-white">${b.carModel}</div>
+                                    <div class="text-[11px] text-silver/60">${b.segment}</div>
+                                </td>
+                                <td class="py-3.5 px-3 text-xs text-silver">
+                                    ${(b.services || []).join(', ')}
+                                </td>
+                                <td class="py-3.5 px-3">
+                                    <div class="font-semibold text-crimson text-xs">₹${(b.estimatedMin || 0).toLocaleString('en-IN')} – ₹${(b.estimatedMax || 0).toLocaleString('en-IN')}</div>
+                                    <div class="text-[11px] text-silver/70 mt-0.5"><i class="fa-regular fa-calendar"></i> ${b.preferredDate}</div>
+                                </td>
+                                <td class="py-3.5 px-3">
+                                    <select onchange="updateBookingStatus('${b.id}', this.value)" class="bg-obsidian border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white focus:border-crimson focus:outline-none">
+                                        <option value="Pending" ${b.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                                        <option value="In Bay" ${b.status === 'In Bay' ? 'selected' : ''}>In Bay</option>
+                                        <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                    </select>
+                                </td>
+                                <td class="py-3.5 px-3 text-right space-x-2 whitespace-nowrap">
+                                    <a href="https://wa.me/${cleanPhone.length >= 10 ? cleanPhone : getActiveWhatsApp()}?text=${waCustomerMsg}" target="_blank" rel="noopener noreferrer"
+                                       class="inline-flex items-center gap-1 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                    <button onclick="deleteBooking('${b.id}')" class="text-silver/60 hover:text-crimson p-1.5" title="Delete Booking">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Render Admin Builds List
+            const buildsList = document.getElementById('admin-builds-list');
+            if (buildsList) {
+                buildsList.innerHTML = state.builds.map(build => `
+                    <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 p-3 rounded-xl">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <img src="${build.image}" onerror="this.src='https://placehold.co/100x100/14181F/FF3B1D?text=BR01'" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
+                            <div class="min-w-0">
+                                <div class="font-semibold text-white text-sm truncate">${build.title}</div>
+                                <div class="text-[11px] text-crimson font-medium">${build.category}</div>
+                                <div class="text-xs text-silver/70 truncate">${build.mods}</div>
+                            </div>
+                        </div>
+                        <button onclick="deleteBuild('${build.id}')" class="text-silver/60 hover:text-crimson p-2 shrink-0" title="Remove Build">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function renderAll() {
+            applySiteSettings();
+            renderBuildsGallery();
+            recalculateEstimator();
+            renderAdminDashboard();
+        }
+
+        // Global Admin Action Handlers
+        window.updateBookingStatus = async function(bookingId, newStatus) {
+            if (state.useCloud && state.db && state.user) {
+                const ref = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId);
+                await updateDoc(ref, { status: newStatus });
+            } else {
+                const item = state.bookings.find(b => b.id === bookingId);
+                if (item) item.status = newStatus;
+                renderAdminDashboard();
+            }
+            showToast(`Booking status updated to ${newStatus}`);
+        };
+
+        window.deleteBooking = async function(bookingId) {
+            if (state.useCloud && state.db && state.user) {
+                await deleteDoc(doc(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings', bookingId));
+            } else {
+                state.bookings = state.bookings.filter(b => b.id !== bookingId);
+                renderAdminDashboard();
+            }
+            showToast("Booking removed.");
+        };
+
+        window.deleteBuild = async function(buildId) {
+            if (state.useCloud && state.db && state.user) {
+                await deleteDoc(doc(state.db, 'artifacts', state.appId, 'public', 'data', 'builds', buildId));
+            } else {
+                state.builds = state.builds.filter(b => b.id !== buildId);
+                renderBuildsGallery();
+                renderAdminDashboard();
+            }
+            showToast("Build removed from public gallery.");
+        };
+
+        window.saveSiteSettings = async function() {
+            const text = document.getElementById('admin-banner-input').value.trim();
+            const visible = document.getElementById('admin-banner-toggle').checked;
+            const rawWa = document.getElementById('cfg-whatsapp')?.value.trim() || getActiveWhatsApp();
+            const cleanWa = rawWa.replace(/[^0-9]/g, '') || DEFAULT_WORKSHOP_PHONE;
+            const formattedWa = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
+            const receiverEmail = document.getElementById('cfg-email')?.value.trim() || "";
+            const newPin = (document.getElementById('cfg-admin-pin')?.value.trim() || getActiveAdminPin());
+
+            state.settings = {
+                ...state.settings,
+                bannerText: text,
+                bannerVisible: visible,
+                whatsappNumber: formattedWa,
+                receiverEmail,
+                adminPin: newPin
+            };
+
+            if (state.useCloud && state.db && state.user) {
+                const settingsDoc = doc(state.db, 'artifacts', state.appId, 'public', 'data', 'settings', 'global');
+                await setDoc(settingsDoc, state.settings, { merge: true });
+            }
+            applySiteSettings();
+            showToast("Settings, WhatsApp routing & Admin PIN saved live!");
+        };
+
+        window.setPresetCarImg = function(url) {
+            document.getElementById('new-build-image').value = url;
+        };
+
+        // Admin Modal & View Navigation
+        window.openAdminModal = function() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeAdminModal = function() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.exitAdminDashboard = function() {
+            document.getElementById('admin-dashboard-view').classList.add('hidden');
+            document.getElementById('public-site-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // DOM Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Custom Month-View Calendar Setup for Preferred Date
+            const dateInput = document.getElementById('cust-date');
+            const openCalBtn = document.getElementById('open-calendar-btn');
+            const calPopup = document.getElementById('custom-calendar-popup');
+            const calMonthYear = document.getElementById('cal-month-year');
+            const calDaysGrid = document.getElementById('cal-days-grid');
+            const prevMonthBtn = document.getElementById('cal-prev-month');
+            const nextMonthBtn = document.getElementById('cal-next-month');
+
+            const now = new Date();
+            const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let selectedDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            let viewYear = selectedDate.getFullYear();
+            let viewMonth = selectedDate.getMonth();
+
+            function formatISO(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            }
+
+            function renderCalendar() {
+                if (!calMonthYear || !calDaysGrid) return;
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                calMonthYear.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+
+                const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
+                const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+                const selectedISO = formatISO(selectedDate);
+                const minISO = formatISO(minDate);
+
+                let html = "";
+                for (let i = 0; i < firstDayIndex; i++) {
+                    html += `<span></span>`;
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const cellDate = new Date(viewYear, viewMonth, day);
+                    const cellISO = formatISO(cellDate);
+                    const isPast = cellISO < minISO;
+                    const isSelected = cellISO === selectedISO;
+
+                    if (isPast) {
+                        html += `<button type="button" disabled class="h-8 w-8 rounded-lg text-silver/25 cursor-not-allowed">${day}</button>`;
+                    } else if (isSelected) {
+                        html += `<button type="button" data-date="${cellISO}" class="cal-day-btn h-8 w-8 rounded-lg bg-crimson text-white font-bold">${day}</button>`;
+                    } else {
+                        html += `<button type="button" data-date="${cellISO}" class="cal-day-btn h-8 w-8 rounded-lg text-white hover:bg-steel transition-colors">${day}</button>`;
+                    }
+                }
+
+                calDaysGrid.innerHTML = html;
+
+                calDaysGrid.querySelectorAll('.cal-day-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const [y, m, d] = btn.dataset.date.split('-').map(Number);
+                        selectedDate = new Date(y, m - 1, d);
+                        if (dateInput) dateInput.value = btn.dataset.date;
+                        renderCalendar();
+                        calPopup?.classList.add('hidden');
+                    });
+                });
+            }
+
+            if (dateInput) {
+                dateInput.value = formatISO(selectedDate);
+                dateInput.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewYear = selectedDate.getFullYear();
+                    viewMonth = selectedDate.getMonth();
+                    renderCalendar();
+                    calPopup?.classList.toggle('hidden');
+                });
+            }
+
+            if (openCalBtn) {
+                openCalBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewYear = selectedDate.getFullYear();
+                    viewMonth = selectedDate.getMonth();
+                    renderCalendar();
+                    calPopup?.classList.toggle('hidden');
+                });
+            }
+
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewMonth--;
+                    if (viewMonth < 0) {
+                        viewMonth = 11;
+                        viewYear--;
+                    }
+                    renderCalendar();
+                });
+            }
+
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    viewMonth++;
+                    if (viewMonth > 11) {
+                        viewMonth = 0;
+                        viewYear++;
+                    }
+                    renderCalendar();
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (calPopup && !calPopup.contains(e.target) && e.target !== dateInput && !openCalBtn?.contains(e.target)) {
+                    calPopup.classList.add('hidden');
+                }
+            });
+
+            renderCalendar();
+            renderAll();
+            initBackend();
+
+            // Open Admin modal privately when URL contains #admin
+            const checkAdminHash = () => {
+                if (window.location.hash.toLowerCase() === '#admin') {
+                    openAdminModal();
+                }
+            };
+            checkAdminHash();
+            window.addEventListener('hashchange', checkAdminHash);
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.toggle('hidden');
+                });
+            }
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+            });
+
+            // Car Segment Selector
+            document.querySelectorAll('.segment-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.segment-btn').forEach(b => {
+                        b.classList.remove('border-crimson', 'bg-crimson/15');
+                        b.classList.add('border-white/10', 'bg-obsidian');
+                        b.querySelector('i').classList.remove('text-crimson');
+                        b.querySelector('i').classList.add('text-silver');
+                    });
+                    btn.classList.add('border-crimson', 'bg-crimson/15');
+                    btn.classList.remove('border-white/10', 'bg-obsidian');
+                    btn.querySelector('i').classList.add('text-crimson');
+                    btn.querySelector('i').classList.remove('text-silver');
+
+                    state.selectedSegment = btn.dataset.segment;
+                    state.segmentMultiplier = parseFloat(btn.dataset.multiplier);
+                    recalculateEstimator();
+                });
+            });
+
+            // Estimator Checkboxes & Car Model Input
+            document.querySelectorAll('.est-checkbox').forEach(cb => {
+                cb.addEventListener('change', recalculateEstimator);
+            });
+            document.getElementById('cust-car').addEventListener('input', recalculateEstimator);
+
+            // Booking Form Submit (Saves to Firestore + Local State)
+            document.getElementById('booking-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const { minPrice, maxPrice, selectedNames } = recalculateEstimator();
+                const name = document.getElementById('cust-name').value.trim();
+                const phone = document.getElementById('cust-phone').value.trim();
+                const email = document.getElementById('cust-email').value.trim();
+                const carModel = document.getElementById('cust-car').value.trim();
+                const preferredDate = document.getElementById('cust-date').value;
+
+                const bookingPayload = {
+                    name,
+                    phone,
+                    email,
+                    carModel,
+                    segment: state.selectedSegment,
+                    services: selectedNames.length > 0 ? selectedNames : ["General Consultation"],
+                    estimatedMin: minPrice,
+                    estimatedMax: maxPrice,
+                    preferredDate,
+                    status: "Pending",
+                    createdAt: Date.now()
+                };
+
+                // Send quote silently to email via Web3Forms
+                fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({
+                        access_key: WEB3FORMS_ACCESS_KEY,
+                        subject: `New BR01 Customs Quote: ${carModel} (${name})`,
+                        from_name: "BR01 Customs Website",
+                        ...(state.settings.receiverEmail ? { replyto: state.settings.receiverEmail } : {}),
+                        Customer_Name: name,
+                        Phone_WhatsApp: phone,
+                        Customer_Email: email,
+                        Car_Model: `${carModel} (${state.selectedSegment})`,
+                        Requested_Services: bookingPayload.services.join(", "),
+                        Estimated_Quote: `₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}`,
+                        Preferred_Date: preferredDate
+                    })
+                }).catch(err => console.error("Email notification error:", err));
+
+                if (state.useCloud && state.db && state.user) {
+                    const bookingsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'bookings');
+                    await addDoc(bookingsCol, bookingPayload);
+                } else {
+                    state.bookings.unshift({ id: `local-${Date.now()}`, ...bookingPayload });
+                    renderAdminDashboard();
+                }
+
+                // Prepare 1-Click WhatsApp Forward
+                const waSummary = `Hi BR01 Customs Patna! 🏁\nI just booked a slot on your website:\n\n• Name: ${name}\n• Phone: ${phone}\n• Car: ${carModel} (${state.selectedSegment})\n• Services: ${bookingPayload.services.join(', ')}\n• Est. Quote: ₹${minPrice.toLocaleString('en-IN')} – ₹${maxPrice.toLocaleString('en-IN')}\n• Preferred Date: ${preferredDate}`;
+                document.getElementById('post-booking-wa-btn').href = `https://wa.me/${getActiveWhatsApp()}?text=${encodeURIComponent(waSummary)}`;
+                document.getElementById('booking-success-box').classList.remove('hidden');
+
+                showToast("Slot saved to BR01 Customs live queue!");
+            });
+
+            // Gallery Filter Pills
+            document.querySelectorAll('.build-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.build-filter-btn').forEach(b => {
+                        b.classList.remove('bg-crimson', 'text-white');
+                        b.classList.add('bg-gunmetal', 'text-silver', 'border', 'border-white/10');
+                    });
+                    btn.classList.add('bg-crimson', 'text-white');
+                    btn.classList.remove('bg-gunmetal', 'text-silver', 'border', 'border-white/10');
+
+                    state.activeBuildFilter = btn.dataset.filter;
+                    renderBuildsGallery();
+                });
+            });
+
+            // Admin PIN Form Submit
+            document.getElementById('admin-pin-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pin = document.getElementById('admin-pin-input').value.trim();
+                if (pin === getActiveAdminPin()) {
+                    document.getElementById('admin-pin-error').classList.add('hidden');
+                    document.getElementById('admin-pin-input').value = '';
+                    closeAdminModal();
+                    document.getElementById('public-site-view').classList.add('hidden');
+                    document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                    renderAdminDashboard();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    document.getElementById('admin-pin-error').classList.remove('hidden');
+                }
+            });
+
+            // Add New Build Form (Admin Panel)
+            document.getElementById('add-build-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('new-build-title').value.trim();
+                const category = document.getElementById('new-build-category').value;
+                const mods = document.getElementById('new-build-mods').value.trim();
+                const image = document.getElementById('new-build-image').value.trim() || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?auto=format&fit=crop&w=1000&q=80";
+
+                const newBuild = {
+                    title,
+                    category,
+                    mods,
+                    image,
+                    createdAt: Date.now()
+                };
+
+                if (state.useCloud && state.db && state.user) {
+                    const buildsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'builds');
+                    await addDoc(buildsCol, newBuild);
+                } else {
+                    state.builds.unshift({ id: `build-${Date.now()}`, ...newBuild });
+                    renderBuildsGallery();
+                    renderAdminDashboard();
+                }
+
+                e.target.reset();
+                showToast("New build published to live gallery!");
+            });
+        });
+    </script>
+</body>
+</html>
