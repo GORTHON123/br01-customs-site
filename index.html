@@ -1781,7 +1781,7 @@
                     const bookingData = {
                         name,
                         phone,
-                        email: email || "reyashjar@gmail.com",
+                        email: email || "",
                         carModel,
                         segment: state.selectedSegment,
                         services: est.selectedNames.length ? est.selectedNames : ["Custom Consultation"],
@@ -1810,20 +1810,28 @@
                                 from_name: "BR01 Customs Website",
                                 name,
                                 phone,
-                                email: email || "Not provided",
                                 car: `${carModel} (${state.selectedSegment})`,
                                 services: bookingData.services.join(', '),
                                 estimate: est.rangeText,
                                 preferred_date: preferredDate
                             };
-                            if (state.settings.receiverEmail) {
-                                web3Payload.cc = state.settings.receiverEmail;
+                            if (email && email.includes('@')) {
+                                web3Payload.email = email;
+                                web3Payload.replyto = email;
                             }
-                            await fetch("https://api.web3forms.com/submit", {
+                            if (state.settings.receiverEmail) {
+                                web3Payload.notes = `Preferred Receiver Email: ${state.settings.receiverEmail}`;
+                            }
+                            const mailRes = await fetch("https://api.web3forms.com/submit", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json", Accept: "application/json" },
                                 body: JSON.stringify(web3Payload)
                             });
+                            const mailData = await mailRes.json().catch(() => ({}));
+                            if (!mailRes.ok || mailData.success === false) {
+                                console.warn("Web3Forms rejected submission:", mailData);
+                                showToast(mailData.message ? `Slot saved, email notice: ${mailData.message}` : "Slot saved, but email notification failed.");
+                            }
                         } catch (mailErr) {
                             console.warn("Web3Forms background dispatch skipped:", mailErr);
                         }
