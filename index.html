@@ -1073,6 +1073,30 @@
             appId: typeof __app_id !== 'undefined' ? __app_id : 'br01-customs-patna'
         };
 
+         // Resize & compress uploaded JPG/PNG so it saves cleanly in Firestore & loads fast
+        function compressImageFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const maxWidth = 1000;
+                        const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+                        canvas.width = Math.round(img.width * scale);
+                        canvas.height = Math.round(img.height * scale);
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
         function getActiveWhatsApp() {
             const raw = (state.settings?.whatsappNumber || DEFAULT_WORKSHOP_PHONE).replace(/[^0-9]/g, '');
             if (!raw) return DEFAULT_WORKSHOP_PHONE;
