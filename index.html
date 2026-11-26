@@ -412,14 +412,14 @@
                             <label class="block font-display uppercase tracking-wider text-white text-lg mb-4">
                                 <span class="text-crimson mr-2">01.</span> Select Car Segment
                             </label>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="car-segment-selector">
-                                <button type="button" data-segment="Bikes" data-multiplier="1.0" class="segment-btn active p-4 rounded-xl border border-crimson bg-crimson/15 text-left transition-all">
-                                    <i class="fa-solid fa fa-motorcycle text-crimson text-xl mb-2 block"></i>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="car-segment-selector">
+                                <button type="button" data-segment="Bikes" data-multiplier="1.0" class="segment-btn p-4 rounded-xl border border-white/10 bg-obsidian hover:border-white/30 text-left transition-all">
+                                    <i class="fa-solid fa-motorcycle text-silver text-xl mb-2 block"></i>
                                     <div class="font-semibold text-white text-sm">Sportsbike / Caferacers</div>
                                     <div class="text-[11px] text-silver/70">GT 650, Z900, Gureilla 450, CB 350RS</div>
                                 </button>
                                 <button type="button" data-segment="Hatchback / Sedan" data-multiplier="1.0" class="segment-btn active p-4 rounded-xl border border-crimson bg-crimson/15 text-left transition-all">
-                                    <i class="fa-solid fa-car-side text-crimson text-xl mb-2 block"></i>
+                                    <i class="fa-solid fa-car-side text-silver text-xl mb-2 block"></i>
                                     <div class="font-semibold text-white text-sm">Hatchback / Sedan</div>
                                     <div class="text-[11px] text-silver/70">Polo, Virtus, Slavia, City, Verna</div>
                                 </button>
@@ -966,7 +966,7 @@
                                 <span id="build-file-label" class="text-xs font-medium text-white">Click to select JPG or PNG photo</span>
                                 <span class="text-[11px] text-silver/60">Auto-optimized for fast loading</span>
                             </label>
-                            <input type="file" id="new-build-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="hidden">
+                            <input type="file" id="new-build-file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple class="hidden">
 
                             <!-- Live Image Preview -->
                             <div id="new-build-preview-wrap" class="hidden mt-3 relative rounded-xl overflow-hidden border border-white/15 bg-obsidian">
@@ -1052,62 +1052,11 @@
         const WEB3FORMS_ACCESS_KEY = "73f17188-1be0-4d50-afc9-bdd7310a0de3";
         const DEFAULT_ADMIN_PIN = "0101";
 
-        // Default Seed Builds (6 Authentic Indian Car Builds for Patna)
-        const SEED_BUILDS = [
-            {
-                id: "seed-1",
-                title: "Mahindra Thar 4x4 — Stage 1 + 2-Inch Lift",
-                category: "Performance & Exhaust",
-                mods: "Stage 1 Diesel ECU Remap, BMC Air Filter, Dr.Nano 2-Inch Lift Kit & All-Terrain Setup",
-                image: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000006
-            },
-            {
-                id: "seed-2",
-                title: "Hyundai Verna Turbo — Valvetronic Exhaust + Matte Wrap",
-                category: "Wraps & PPF",
-                mods: "Mark Performance Valvetronic Exhaust, Avery Satin Stealth Black Wrap & De-Chrome",
-                image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000005
-            },
-            {
-                id: "seed-3",
-                title: "Skoda Slavia 1.5 TSI — ECU Tune + Dr.Nano Coilovers",
-                category: "Performance & Exhaust",
-                mods: "Stage 1+ ECU & DSG Calibration, Dr.Nano Adjustable Coil-overs & Stainless Downpipe",
-                image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000004
-            },
-            {
-                id: "seed-4",
-                title: "Toyota Fortuner Legender — Full Gloss TPU PPF",
-                category: "Wraps & PPF",
-                mods: "200-Micron Self-Healing Gloss TPU PPF, 9H Ceramic Topcoat & Underbody Anti-Rust",
-                image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000003
-            },
-            {
-                id: "seed-5",
-                title: "Honda City ZX — Xenon_it Bi-LED Projector Retrofit",
-                category: "Lighting & Suspension",
-                mods: "Xenon_it Tri-Color Bi-LED Projectors, Sequential DRLs & 64-Color Ambient Cabin Lighting",
-                image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000002
-            },
-            {
-                id: "seed-6",
-                title: "Tata Nexon Fearless — 9H Graphene Ceramic Coating",
-                category: "Wraps & PPF",
-                mods: "3-Stage Paint Correction, 10H Graphene Ceramic Shield & Interior Leather Protection",
-                image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80",
-                createdAt: 1710000001
-            }
-        ];
-
-        // Application Reactive State
+        // Application Reactive State (Starts clean — no auto-reappearing demo builds)
         let state = {
-            builds: [...SEED_BUILDS],
+            builds: [],
             bookings: [],
+            uploadedBuildDataUrl: "",
             settings: {
                 bannerText: "🔥 MONSOON & FESTIVE OFFER: 15% OFF Full Body PPF & Ceramic Coating — Book Your Slot Today",
                 bannerVisible: true,
@@ -1524,22 +1473,34 @@
         };
 
         // Admin Modal & View Navigation
-        window.openAdminModal = function() {
+        window.openAdminModal = () => {
             const modal = document.getElementById('admin-login-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                const pinInput = document.getElementById('admin-pin-input');
+                if (pinInput) {
+                    pinInput.value = "";
+                    pinInput.focus();
+                }
+            }
         };
 
-        window.closeAdminModal = function() {
+        window.closeAdminModal = () => {
             const modal = document.getElementById('admin-login-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            if (window.location.hash === '#admin') {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
         };
 
-        window.exitAdminDashboard = function() {
+        window.exitAdminDashboard = () => {
             document.getElementById('admin-dashboard-view').classList.add('hidden');
             document.getElementById('public-site-view').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', window.location.pathname + window.location.search);
         };
 
         // DOM Event Listeners
