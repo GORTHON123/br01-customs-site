@@ -1774,6 +1774,81 @@
                 });
             });
 
+
+            // Photo Upload & Add Build Form
+            const fileInput = document.getElementById('new-build-file');
+            const previewWrap = document.getElementById('new-build-preview-wrap');
+            const previewImg = document.getElementById('new-build-preview-img');
+            const fileLabel = document.getElementById('build-file-label');
+            const clearFileBtn = document.getElementById('clear-build-file-btn');
+
+            if (fileInput) {
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) return;
+                    try {
+                        const compressed = await compressImageFile(file);
+                        state.uploadedBuildDataUrl = compressed;
+                        if (previewImg) previewImg.src = compressed;
+                        if (previewWrap) previewWrap.classList.remove('hidden');
+                        if (fileLabel) fileLabel.textContent = file.name;
+                    } catch (err) {
+                        console.error("Image processing error:", err);
+                        showToast("Could not process selected image");
+                    }
+                });
+            }
+
+            if (clearFileBtn) {
+                clearFileBtn.addEventListener('click', () => {
+                    state.uploadedBuildDataUrl = "";
+                    if (fileInput) fileInput.value = "";
+                    if (previewWrap) previewWrap.classList.add('hidden');
+                    if (fileLabel) fileLabel.textContent = "Click to select JPG or PNG photo";
+                });
+            }
+
+            const addBuildForm = document.getElementById('add-build-form');
+            if (addBuildForm) {
+                addBuildForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('new-build-title').value.trim();
+                    const category = document.getElementById('new-build-category').value;
+                    const mods = document.getElementById('new-build-mods').value.trim();
+                    const urlInput = document.getElementById('new-build-image').value.trim();
+                    const imageUrl = state.uploadedBuildDataUrl || urlInput || "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?auto=format&fit=crop&w=1000&q=80";
+
+                    const newBuild = {
+                        title,
+                        category,
+                        mods,
+                        imageUrl,
+                        createdAt: Date.now()
+                    };
+
+                    try {
+                        if (state.useCloud && state.db) {
+                            const buildsCol = collection(state.db, 'artifacts', state.appId, 'public', 'data', 'builds');
+                            await addDoc(buildsCol, newBuild);
+                        } else {
+                            state.builds.unshift({ id: `build-${Date.now()}`, ...newBuild });
+                            saveLocalState();
+                            renderBuildsGallery();
+                            renderAdminDashboard();
+                        }
+
+                        addBuildForm.reset();
+                        state.uploadedBuildDataUrl = "";
+                        if (previewWrap) previewWrap.classList.add('hidden');
+                        if (fileLabel) fileLabel.textContent = "Click to select JPG or PNG photo";
+                        showToast("New build published to gallery!");
+                    } catch (err) {
+                        console.error("Publish build error:", err);
+                        showToast("Error publishing build");
+                    }
+                });
+            }
+
             // Admin PIN Form Submit
             document.getElementById('admin-pin-form').addEventListener('submit', (e) => {
                 e.preventDefault();
