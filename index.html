@@ -1197,22 +1197,15 @@
             if (!state.db || !state.user) return;
             const appId = state.appId;
 
-            // 1. Public Builds Collection
+            // 1. Public Builds Collection (stays permanently empty when all builds are deleted)
             const buildsCol = collection(state.db, 'artifacts', appId, 'public', 'data', 'builds');
             onSnapshot(buildsCol, (snapshot) => {
-                if (snapshot.empty) {
-                    // Seed initial builds to Firestore once
-                    SEED_BUILDS.forEach(async (b) => {
-                        await setDoc(doc(state.db, 'artifacts', appId, 'public', 'data', 'builds', b.id), b);
-                    });
-                } else {
-                    const items = [];
-                    snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-                    items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    state.builds = items;
-                    renderBuildsGallery();
-                    renderAdminDashboard();
-                }
+                const items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                items.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                state.builds = items;
+                renderBuildsGallery();
+                renderAdminDashboard();
             }, (error) => console.error("Builds snapshot error:", error));
 
             // 2. Public Bookings Collection
@@ -1231,6 +1224,7 @@
                 if (docSnap.exists()) {
                     state.settings = { ...state.settings, ...docSnap.data() };
                     applySiteSettings();
+                    renderAdminDashboard();
                 }
             }, (error) => console.error("Settings snapshot error:", error));
         }
@@ -1407,21 +1401,32 @@
             // Render Admin Builds List
             const buildsList = document.getElementById('admin-builds-list');
             if (buildsList) {
-                buildsList.innerHTML = state.builds.map(build => `
-                    <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 p-3 rounded-xl">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <img src="${build.image}" onerror="this.src='https://placehold.co/100x100/14181F/FF3B1D?text=BR01'" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
-                            <div class="min-w-0">
-                                <div class="font-semibold text-white text-sm truncate">${build.title}</div>
-                                <div class="text-[11px] text-crimson font-medium">${build.category}</div>
-                                <div class="text-xs text-silver/70 truncate">${build.mods}</div>
-                            </div>
+                if (state.builds.length === 0) {
+                    buildsList.innerHTML = `
+                        <div class="p-6 text-center text-xs text-silver/60 bg-obsidian rounded-xl border border-white/10">
+                            No published builds. Use the form on the left to publish your first build.
                         </div>
-                        <button onclick="deleteBuild('${build.id}')" class="text-silver/60 hover:text-crimson p-2 shrink-0" title="Remove Build">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `).join('');
+                    `;
+                } else {
+                    buildsList.innerHTML = state.builds.map(build => `
+                        <div class="flex items-center justify-between gap-3 bg-obsidian border border-white/10 rounded-xl p-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img src="${build.imageUrl || 'https://placehold.co/120x80/14181F/FF3B1D?text=BR01'}"
+                                     onerror="this.src='https://placehold.co/120x80/14181F/FF3B1D?text=BR01'"
+                                     alt="${build.title}" class="w-16 h-12 rounded-lg object-cover shrink-0">
+                                <div class="min-w-0">
+                                    <div class="font-semibold text-white text-sm truncate">${build.title}</div>
+                                    <div class="text-[11px] text-crimson">${build.category}</div>
+                                    <div class="text-[11px] text-silver/60 truncate">${build.mods}</div>
+                                </div>
+                            </div>
+                            <button onclick="deleteBuild('${build.id}')" aria-label="Delete Build"
+                                    class="shrink-0 bg-crimson/15 hover:bg-crimson text-crimson hover:text-white px-3 py-2 rounded-lg text-xs font-semibold transition-colors">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
             }
         }
 
